@@ -11,20 +11,24 @@ import RealityKitContent
 
 struct ContentView: View {
 
+    @State private var showRaceTrack: Bool = false
+    
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
+    
     var body: some View {
         VStack {
-            Model3D(named: "Scene", bundle: realityKitContentBundle)
-                .padding(.bottom, 50)
-
-            Text("Hello, world!")
-            
-
-            LeaderboardView()
-                .padding(.top, 20)
-
-            ToggleImmersiveSpaceButton()
+            Text("F1 - Vision")
+            Toggle("Show Race Track", isOn: $showRaceTrack)
+                .onChange(of: showRaceTrack) { value in
+                    if value {
+                        openWindow(id: "race-track")
+                    } else {
+                        dismissWindow(id: "race-track")
+                    }
+                }
         }
-        .padding()
+        
     }
 }
 

@@ -18,6 +18,9 @@ struct f1_visionApp: App {
             ContentView()
                 .environment(appModel)
         }
+        WindowGroup {
+            RaceTrackView()
+        }.windowStyle(.volumetric)
 
         // Separate LeaderboardView Window
         WindowGroup("Leaderboard") {
