@@ -42,4 +42,3 @@ struct f1_visionApp: App {
         .immersionStyle(selection: .constant(.mixed), in: .mixed)
      }
 }
-
