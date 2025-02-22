@@ -17,6 +17,9 @@ struct f1_visionApp: App {
             ContentView()
                 .environment(appModel)
         }
+        WindowGroup {
+            RaceTrackView()
+        }.windowStyle(.volumetric)
 
         ImmersiveSpace(id: appModel.immersiveSpaceID) {
             ImmersiveView()
