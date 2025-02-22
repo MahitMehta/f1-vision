@@ -151,6 +151,47 @@ struct LeaderboardView: View {
                             .padding(.leading, 30)
                     }
                     
+                    // DRS / PIT
+                    
+                    let textWidth: CGFloat = 50
+                    
+                    if (entry.3 == "enabled") {
+                        Text("DRS")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .frame(width: textWidth, alignment: .leading)
+                            .padding(.leading, 30)
+                            .foregroundColor(.white)
+                    } else if (entry.3 == "disabled") {
+                        Text("DRS")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .frame(width: textWidth, alignment: .leading)
+                            .padding(.leading, 30)
+                            .foregroundColor(Color(hex: "4D4D4D"))
+                    } else if (entry.3 == "on") {
+                        Text("DRS")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .frame(width: textWidth, alignment: .leading)
+                            .padding(.leading, 30)
+                            .foregroundColor(Color(hex: "52E252"))
+                    } else if (entry.3 == "pit") {
+                        Text("PIT")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .frame(width: textWidth, alignment: .leading)
+                            .padding(.leading, 30)
+                            .foregroundColor(Color(hex: "64C4FF"))
+                    } else {
+                        Text("")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .frame(width: textWidth, alignment: .leading)
+                            .padding(.leading, 30)
+                            .foregroundColor(Color(hex: "64C4FF"))
+                    }
+                    
                     // Tire type
                     
                     Image(entry.2)

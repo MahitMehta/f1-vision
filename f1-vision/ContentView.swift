@@ -17,6 +17,10 @@ struct ContentView: View {
                 .padding(.bottom, 50)
 
             Text("Hello, world!")
+            
+
+            LeaderboardView()
+                .padding(.top, 20)
 
             ToggleImmersiveSpaceButton()
         }
