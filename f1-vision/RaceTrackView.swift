@@ -109,6 +109,7 @@ struct RaceTrackView: View {
             track.scale = SIMD3<Float>(scaleFactor, scaleFactor, scaleFactor)
             track.position = [0, 0, 0]
             
+            
             // track.components.set(CollisionComponent(shapes: [.generateBox(size:SIMD3<Float>(1,1,1))]))
             //car.position += [0.5, 0, 0]
             

@@ -18,7 +18,7 @@ struct f1_visionApp: App {
             ContentView()
                 .environment(appModel)
         }
-        WindowGroup {
+        WindowGroup(id: "race-track") {
             RaceTrackView()
         }.windowStyle(.volumetric)
 

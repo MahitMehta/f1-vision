@@ -10,28 +10,29 @@ struct LeaderboardView: View {
     var airTemp = 2
     
     let leaderboard = [
-        ("VER", "Red Bull Racing Honda RBPT", "M", "enabled"),
-        ("PER", "Red Bull Racing Honda RBPT", "S", "pit"),
-        ("HAM", "Mercedes", "H", "on"),
-        ("ALO", "Aston Martin Aramco Mercedes", "M", "off"),
-        ("LEC", "Ferrari", "I", "enabled"),
-        ("NOR", "McLaren Mercedes", "W", "disabled"),
-        ("SAI", "Ferrari", "S", "pit"),
-        ("RUS", "Mercedes", "H", "on"),
-        ("PIA", "McLaren Mercedes", "M", "off"),
-        ("STR", "Aston Martin Aramco Mercedes", "W", "enabled"),
-        ("GAS", "Alpine Renault", "I", "disabled"),
-        ("OCO", "Alpine Renault", "S", "on"),
-        ("ALB", "Williams Mercedes", "H", "pit"),
-        ("TSU", "RB Honda RBPT", "M", "off"),
-        ("BOT", "Kick Sauber Ferrari", "W", "enabled"),
-        ("HUL", "Haas Ferrari", "S", "on"),
-        ("RIC", "RB Honda RBPT", "H", "pit"),
-        ("ZHO", "Kick Sauber Ferrari", "I", "disabled"),
-        ("MAG", "Haas Ferrari", "M", "enabled"),
-        ("LAW", "RB Honda RBPT", "W", "off"),
-        ("SAR", "Williams Mercedes", "S", "on")
+        ("VER", "Red Bull Racing Honda RBPT", "M", "enabled", 18, "0.000", "5:14.567", ["5:12.345", "5:30.456", "5:31.543"]),
+        ("PER", "Red Bull Racing Honda RBPT", "S", "pit", 5, "+5.123", "5:01.234", ["5:45.123", "5:50.456", "5:25.789"]),
+        ("HAM", "Mercedes", "H", "on", 24, "+12.345", "5:30.234", ["5:34.567", "5:45.123", "5:50.345"]),
+        ("ALO", "Aston Martin Aramco Mercedes", "M", "off", 12, "+15.678", "5:12.567", ["5:01.789", "5:10.123", "5:00.789"]),
+        ("LEC", "Ferrari", "I", "enabled", 27, "+20.234", "5:45.678", ["5:45.234", "5:50.345", "5:00.789"]),
+        ("NOR", "McLaren Mercedes", "W", "disabled", 9, "+25.789", "5:23.456", ["5:10.123", "5:12.567", "5:00.345"]),
+        ("SAI", "Ferrari", "S", "pit", 30, "+30.123", "5:50.123", ["5:32.987", "5:45.567", "5:00.789"]),
+        ("RUS", "Mercedes", "H", "on", 15, "+35.678", "5:45.234", ["5:50.678", "5:55.123", "5:00.567"]),
+        ("PIA", "McLaren Mercedes", "M", "off", 22, "+40.234", "5:01.567", ["5:12.345", "5:10.234", "5:00.789"]),
+        ("STR", "Aston Martin Aramco Mercedes", "W", "enabled", 3, "+45.123", "5:12.345", ["5:01.123", "5:12.567", "5:00.345"]),
+        ("GAS", "Alpine Renault", "I", "disabled", 6, "+50.567", "5:45.678", ["5:45.234", "5:10.123", "5:00.567"]),
+        ("OCO", "Alpine Renault", "S", "on", 11, "+55.234", "5:50.789", ["5:55.345", "5:45.123", "5:00.789"]),
+        ("ALB", "Williams Mercedes", "H", "pit", 25, "+60.345", "5:12.567", ["5:10.234", "5:12.345", "5:00.789"]),
+        ("TSU", "RB Honda RBPT", "M", "off", 8, "+65.678", "5:20.234", ["5:20.567", "5:12.567", "5:00.345"]),
+        ("BOT", "Kick Sauber Ferrari", "W", "enabled", 21, "+70.123", "5:10.123", ["5:00.789", "5:10.345", "5:00.789"]),
+        ("HUL", "Haas Ferrari", "S", "on", 13, "+75.678", "5:45.678", ["5:34.567", "5:12.789", "5:00.345"]),
+        ("RIC", "RB Honda RBPT", "H", "pit", 17, "+80.234", "5:45.234", ["5:45.123", "5:50.678", "5:00.789"]),
+        ("ZHO", "Kick Sauber Ferrari", "I", "disabled", 4, "+85.123", "5:50.123", ["5:50.789", "5:12.345", "5:00.567"]),
+        ("MAG", "Haas Ferrari", "M", "enabled", 19, "+90.678", "5:10.567", ["5:10.234", "5:10.678", "5:00.345"]),
+        ("LAW", "RB Honda RBPT", "W", "off", 2, "+95.345", "5:25.123", ["5:25.678", "5:10.123", "5:00.567"]),
+        ("SAR", "Williams Mercedes", "S", "on", 28, "+100.789", "5:45.789", ["5:34.123", "5:12.567", "5:00.789"])
     ]
+
 
     let teamHexcode: [String: String] = [
         "Red Bull Racing Honda RBPT": "3671C6",
@@ -200,6 +201,57 @@ struct LeaderboardView: View {
                         .frame(width: 50, height: 50)
                         .padding(.leading, 20)
                     
+                    // Tire laps
+                    
+                    Text("L\(entry.4)")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.leading, 20)
+                        .frame(width: 100, alignment: .leading)
+                    
+                    // Fastest Laps
+                    
+                    Text("\(entry.5)")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.leading, 5)
+                        .frame(width: 120, alignment: .leading)
+                        .foregroundColor(Color(hex: "52E252"))
+                    
+                    Rectangle()
+                        .fill(Color.gray)
+                        .frame(width: 2, height: 40)
+                        .padding(.leading, 10)
+                        .padding(.trailing, 10)
+                    
+                    // Current Laps
+                    
+                    Text("\(entry.6)")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .padding(.leading, 5)
+                        .frame(width: 170, alignment: .leading)
+                        .foregroundColor(Color(hex: "FFFFFF"))
+                    
+                    // Sector Laps
+                    
+                    Text("\(entry.7[0])")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .frame(width: 130, alignment: .leading)
+                        .foregroundColor(Color(hex: "767676"))
+                    
+                    Text("\(entry.7[1])")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .frame(width: 130, alignment: .leading)
+                        .foregroundColor(Color(hex: "767676"))
+                    
+                    Text("\(entry.7[2])")
+                        .font(.title)
+                        .fontWeight(.bold)
+                        .frame(width: 130, alignment: .leading)
+                        .foregroundColor(Color(hex: "767676"))
                     
                 }
                 .listRowBackground(Color(hex: "18191A"))
