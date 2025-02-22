@@ -1,44 +1,20 @@
-//
-//  f1_visionApp.swift
-//  f1-vision
-//
-//  Created by Nivan Gujral on 2/21/25.
-//
-
 import SwiftUI
 
 @main
 struct f1_visionApp: App {
-
-    @State private var appModel = AppModel()
-
     var body: some Scene {
-        // Main ContentView Window
-        WindowGroup {
+        WindowGroup(id: "radio") {
+            RadioView(
+                driver: "Lewis Hamilton",
+                audioUrl: "https://livetiming.formula1.com/static/2023/2023-09-17_Singapore_Grand_Prix/2023-09-15_Practice_1/TeamRadio/SERPER01_11_20230915_113201.mp3"
+            )
+        }
+        .defaultSize(width: 325, height: 250)
+        .windowStyle(.plain)
+        
+        WindowGroup(id: "content") {
             ContentView()
-                .environment(appModel)
         }
-        WindowGroup(id: "race-track") {
-            RaceTrackView()
-        }.windowStyle(.volumetric)
+    }
 
-        // Separate LeaderboardView Window
-        WindowGroup("Leaderboard") {
-            LeaderboardView()
-                .environment(appModel) // Pass the same environment if needed
-        }
-
-        // Immersive Space
-        ImmersiveSpace(id: appModel.immersiveSpaceID) {
-            ImmersiveView()
-                .environment(appModel)
-                .onAppear {
-                    appModel.immersiveSpaceState = .open
-                }
-                .onDisappear {
-                    appModel.immersiveSpaceState = .closed
-                }
-        }
-        .immersionStyle(selection: .constant(.mixed), in: .mixed)
-     }
 }

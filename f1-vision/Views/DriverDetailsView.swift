@@ -37,39 +37,37 @@ struct DriverDetailsView: View {
                                 .frame(width: 30, height: 20)
                         }
                         
-                        Text("Position: #\(driver.position)")
-                            .font(.system(size: 16, weight: .regular))
-                            .foregroundColor(.white)
                     }
                 }
                 .padding(.top, 20)
                 .padding(.horizontal)
+
+
                 // Speedometer
-                VStack {
-                    Text("Current Speed")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.white)
+                HStack {
+                    VStack {
+                        Text("Current Speed")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+                        
+                        SpeedometerView(currentSpeed: carStats.speed)
+                            .frame(width: 150, height: 150)
+                            .padding()
+                            .cornerRadius(15)
+                            .shadow(radius: 5)
+                    }
                     
-                    SpeedometerView(currentSpeed: carStats.speed)
-                        .frame(width: 150, height: 150)
-                        .padding()
-                        .background(Color(.systemGray5))
-                        .cornerRadius(15)
-                        .shadow(radius: 5)
-                }
-                
-                // Braking Indicator
-                VStack {
-                    Text("Braking")
-                        .font(.system(size: 20, weight: .bold))
-                        .foregroundColor(.white)
-                    
-                    ProgressBar(value: carStats.brake)
-                        .frame(height: 15)
-                        .padding(.horizontal)
-                        .background(Color(.systemGray5))
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
+                    VStack {
+                        Text("Gear")
+                            .font(.system(size: 20, weight: .bold))
+                            .foregroundColor(.white)
+                        
+                        GearIndicatorView(currentGear: carStats.n_gear)
+                            .frame(width: 100, height: 100)
+                            .padding()
+                            .cornerRadius(15)
+                            .shadow(radius: 5)
+                    }
                 }
                 
                 // Additional Stats
@@ -77,11 +75,7 @@ struct DriverDetailsView: View {
                     Text("Additional Stats")
                         .font(.system(size: 20, weight: .bold))
                         .foregroundColor(.white)
-                    
-                    Text("Gear: \(carStats.n_gear)")
-                        .font(.system(size: 16, weight: .regular))
-                        .foregroundColor(.white)
-                    
+
                     Text("RPM: \(carStats.rpm)")
                         .font(.system(size: 16, weight: .regular))
                         .foregroundColor(.white)
@@ -103,6 +97,29 @@ struct DriverDetailsView: View {
             .background(Color(.systemGray6))
             .cornerRadius(20)
             .shadow(radius: 10)
+        }
+    }
+}
+
+// Gear Indicator View
+struct GearIndicatorView: View {
+    var currentGear: Int
+
+    var body: some View {
+        ZStack {
+            Circle()
+                .stroke(Color.gray, lineWidth: 15)
+                .opacity(0.3)
+            
+            Circle()
+                .trim(from: 0, to: CGFloat(min(currentGear, 8)) / 8) // Assuming max gear is 8
+                .stroke(Color.blue, lineWidth: 15)
+                .rotationEffect(.degrees(-90))
+                .animation(.easeInOut, value: currentGear)
+            
+            Text("\(currentGear)")
+                .font(.title)
+                .foregroundColor(.white)
         }
     }
 }
