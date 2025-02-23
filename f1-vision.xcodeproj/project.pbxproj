@@ -71,10 +71,18 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		178FB4392D6B4E01009FA429 /* New Group */ = {
+			isa = PBXGroup;
+			children = (
+			);
+			path = "New Group";
+			sourceTree = "<group>";
+		};
 		F45D561F2D6969C500DDDD53 = {
 			isa = PBXGroup;
 			children = (
 				F45D562A2D6969C500DDDD53 /* f1-vision */,
+				178FB4392D6B4E01009FA429 /* New Group */,
 				F45D562B2D6969C500DDDD53 /* Packages */,
 				F45D56462D6969C700DDDD53 /* f1-visionTests */,
 				F45D56292D6969C500DDDD53 /* Products */,

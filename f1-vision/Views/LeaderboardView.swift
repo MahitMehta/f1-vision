@@ -38,27 +38,27 @@ struct LeaderboardView: View {
     typealias LeaderboardEntry = (Int, String, String, String, String, Int, String, String, [String])
     
     @State private var leaderboard: [LeaderboardEntry] = [
-        (1, "VER", "Red Bull Racing", "M", "disabled", 18, "0.000", "00.000", ["00.000", "00.000", "00.000"]),
-        (11, "PER", "Red Bull Racing", "S", "pit", 5, "+5.123", "00.000", ["00.000", "00.000", "00.000"]),
-        (44, "HAM", "Mercedes", "H", "on", 24, "+12.345", "00.000", ["00.000", "00.000", "00.000"]),
-        (14, "ALO", "Aston Martin", "M", "off", 12, "+15.678", "00.000", ["00.000", "00.000", "00.000"]),
-        (16, "LEC", "Ferrari", "I", "enabled", 27, "+20.234", "00.000", ["00.000", "00.000", "00.000"]),
-        (4, "NOR", "McLaren", "W", "disabled", 9, "+25.789", "00.000", ["00.000", "00.000", "00.000"]),
-        (55, "SAI", "Ferrari", "S", "pit", 30, "+30.123", "00.000", ["00.000", "00.000", "00.000"]),
-        (63, "RUS", "Mercedes", "H", "on", 15, "+35.678", "00.000", ["00.000", "00.000", "00.000"]),
-        (81, "PIA", "McLaren", "M", "off", 22, "+40.234", "00.000", ["00.000", "00.000", "00.000"]),
-        (18, "STR", "Aston Martin", "W", "enabled", 3, "+45.123", "00.000", ["00.000", "00.000", "00.000"]),
-        (10, "GAS", "Alpine", "I", "disabled", 6, "+50.567", "00.000", ["00.000", "00.000", "00.000"]),
-        (31, "OCO", "Alpine", "S", "on", 11, "+55.234", "00.000", ["00.000", "00.000", "00.000"]),
-        (23, "ALB", "Williams", "H", "pit", 25, "+60.345", "00.000", ["00.000", "00.000", "00.000"]),
-        (22, "TSU", "RB Honda RBPT", "M", "off", 8, "+65.678", "00.000", ["00.000", "00.000", "00.000"]),
-        (77, "BOT", "Kick Sauber", "W", "enabled", 21, "+70.123", "00.000", ["00.000", "00.000", "00.000"]),
-        (27, "HUL", "Haas Ferrari", "S", "on", 13, "+75.678", "00.000", ["00.000", "00.000", "00.000"]),
-        (23, "RIC", "RB", "H", "pit", 17, "+80.234", "00.000", ["00.000", "00.000", "00.000"]),
-        (24, "ZHO", "Kick Sauber", "I", "disabled", 4, "+85.123", "00.000", ["00.000", "00.000", "00.000"]),
-        (20, "MAG", "Haas", "M", "enabled", 19, "+90.678", "00.000", ["00.000", "00.000", "00.000"]),
-        (30, "LAW", "RB", "W", "off", 2, "+95.345", "00.000", ["00.000", "00.000", "00.000"]),
-        (2, "SAR", "Williams", "S", "on", 28, "+100.789", "00.000", ["00.000", "00.000", "00.000"])
+        (1, "VER", "Red Bull Racing", "M", "disabled", 0, "0.000", "00.000", ["00.000", "00.000"]),
+        (11, "PER", "Red Bull Racing", "S", "pit", 0, "+5.123", "00.000", ["00.000", "00.000"]),
+        (44, "HAM", "Mercedes", "H", "on", 0, "+12.345", "00.000", ["00.000", "00.000", "00.000"]),
+        (14, "ALO", "Aston Martin", "M", "off", 0, "+15.678", "00.000", ["00.000", "00.000"]),
+        (16, "LEC", "Ferrari", "I", "enabled", 0, "+20.234", "00.000", ["00.000", "00.000"]),
+        (4, "NOR", "McLaren", "W", "disabled", 0, "+25.789", "00.000", ["00.000", "00.000"]),
+        (55, "SAI", "Ferrari", "S", "pit", 0, "+30.123", "00.000", ["00.000", "00.000"]),
+        (63, "RUS", "Mercedes", "H", "on", 0, "+35.678", "00.000", ["00.000", "00.000"]),
+        (81, "PIA", "McLaren", "M", "off", 0, "+40.234", "00.000", ["00.000", "00.000"]),
+        (18, "STR", "Aston Martin", "W", "enabled", 0, "+45.123", "00.000", ["00.000", "00.000"]),
+        (10, "GAS", "Alpine", "I", "disabled", 0, "+50.567", "00.000", ["00.000", "00.000"]),
+        (31, "OCO", "Alpine", "S", "on", 0, "+55.234", "00.000", ["00.000", "00.000"]),
+        (23, "ALB", "Williams", "H", "pit", 0, "+60.345", "00.000", ["00.000", "00.000"]),
+        (22, "TSU", "RB Honda RBPT", "M", "off", 0, "+65.678", "00.000", ["00.000", "00.000"]),
+        (77, "BOT", "Kick Sauber", "W", "enabled", 0, "+70.123", "00.000", ["00.000", "00.000"]),
+        (27, "HUL", "Haas Ferrari", "S", "on", 0, "+75.678", "00.000", ["00.000", "00.000"]),
+        (23, "RIC", "RB", "H", "pit", 0, "+80.234", "00.000", ["00.000", "00.000"]),
+        (24, "ZHO", "Kick Sauber", "I", "disabled", 4, "+85.123", "00.000", ["00.000", "00.000"]),
+        (20, "MAG", "Haas", "M", "enabled", 0, "+90.678", "00.000", ["00.000", "00.000"]),
+        (30, "LAW", "RB", "W", "off", 0, "+95.345", "00.000", ["00.000", "00.000"]),
+        (2, "SAR", "Williams", "S", "on", 0, "+100.789", "00.000", ["00.000", "00.000"])
     ]
     
     func overtake(car1: Int, car2: Int) {
@@ -321,12 +321,6 @@ struct LeaderboardView: View {
                             .frame(width: 130, alignment: .leading)
                             .foregroundColor(Color(hex: "767676"))
                         
-                        Text("\(entry.8[2])")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .frame(width: 130, alignment: .leading)
-                            .foregroundColor(Color(hex: "767676"))
-                        
                     }
                     .listRowBackground(Color(hex: "18191A"))
                 }
@@ -378,15 +372,17 @@ struct LeaderboardView: View {
                     }
                 }
                 
-                // Section 3 + Record Lap
-                let section3Delay = section2Delay + section3
-                await eventDeployer.subscribe(key: Int(section3Delay)) {
+                // Lap done
+                await eventDeployer.subscribe(key: Int(lapTime)) {
                     DispatchQueue.main.async {
                         guard let idx = leaderboard.firstIndex(where: { $0.0 == driverLapData.id }) else {
                             return
                         }
-                        leaderboard[idx].8[2] = "\(section3)"
+                        leaderboard[idx].8[0] = "00.000"
+                        leaderboard[idx].8[1] = "00.000"
+                        
                         leaderboard[idx].7 = "\(lapTime)"
+                        leaderboard[idx].5 = Int(lapNumber)
                     }
                 }
             }

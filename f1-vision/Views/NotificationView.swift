@@ -14,7 +14,7 @@ struct NotificationView: View {
         ZStack {
             Parallelogram()
                 .fill(Color(hex: "111015"))
-                .frame(height: 120)
+                .frame(minWidth: 400, maxWidth: 800, maxHeight: 40)
                 .shadow(radius: 5)
             
             if let contentProps = contentProps {
@@ -29,7 +29,7 @@ struct NotificationView: View {
         .onAppear {
             if let contentProps = contentProps {
                 DispatchQueue.main.asyncAfter(deadline: .now() + contentProps.displayDuration) {
-                    dismissWindow(id: "notification")
+                    dismissWindow(id: "event-notif")
                 }
             }
         }

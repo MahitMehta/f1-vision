@@ -24,12 +24,14 @@ struct RadioView: View {
             
             VStack(alignment: .trailing, spacing: 10) {
                 // Driver's Last Name
-                Text(driverProps?.driver.split(separator: " ").last?.uppercased() ?? "")
-                    .font(.system(size: 32, weight: .bold))
-                    .foregroundColor(Color(hex: "00A19B"))
-                    .multilineTextAlignment(.trailing)
-                    .padding(.top, 20)
-                
+                if let driver = driverProps?.driver {
+                    Text(driver)
+                        .font(.system(size: 32, weight: .bold))
+                        .foregroundColor(Color(hex: "00A19B"))
+                        .multilineTextAlignment(.trailing)
+                        .padding(.top, 20)
+                }
+               
                 // Static Text "RADIO"
                 Text("RADIO")
                     .font(.system(size: 32, weight: .bold))

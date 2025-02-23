@@ -58,6 +58,7 @@ struct f1_visionApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(eventDeployer: eventDeployer)
+                .frame(width: 600, height: 700)
         }
         WindowGroup(id: "dashboard") {
             LeaderboardView(eventDeployer: eventDeployer)
@@ -66,6 +67,10 @@ struct f1_visionApp: App {
             RaceTrackView()
         }.windowStyle(.volumetric)
         
+        WindowGroup(id: "home") {
+            NewContentView(eventDeployer: eventDeployer)
+               // .frame(width: 600, height: 700)
+        }
         // Radio Window
         WindowGroup(id: "radio", for: RadioViewProps.self) { data in
             RadioView(
@@ -74,6 +79,11 @@ struct f1_visionApp: App {
         }
         .defaultSize(width: 325, height: 250)
         .windowStyle(.plain)
+        .defaultWindowPlacement { content, context in
+            guard let dashboard = context.windows.first(where: { $0.id == "race-video" }) else { return WindowPlacement(nil)
+            }
+            return WindowPlacement(.leading(dashboard))
+        }
         
         WindowGroup(id: "driver-details") {
             DriverDetailsView(
@@ -82,12 +92,61 @@ struct f1_visionApp: App {
             )
         }
         .defaultSize(width: 400, height: 600)
+        /*.defaultWindowPlacement { content, context in
+            guard let dashboard = context.windows.first(where: { $0.id == "race-video" }) else { return WindowPlacement(nil)
+            }
+            return WindowPlacement(.trailing(dashboard))
+        }*/
         
         WindowGroup(id: "event-notif", for: NotificationViewProps.self) { data in
             NotificationView(
                 contentProps: data.wrappedValue ?? nil
             )
+            .frame(minWidth: 500, idealWidth: 500, maxWidth: 600, minHeight: 40)
+        }
+        .defaultSize(width: 500, height: 40)
+        .windowStyle(.plain)
+        .defaultWindowPlacement { content, context in
+            guard let radio = context.windows.first(where: { $0.id == "radio" }) else {
+                guard let dashboard = context.windows.first(where: { $0.id == "race-video" }) else {
+                    return WindowPlacement(nil)
+                }
+                return WindowPlacement(.leading(dashboard))
+            }
+            return WindowPlacement(.below(radio))
+        }
+        WindowGroup(id: "race-video") {
+            if let url = Bundle.main.url(forResource: "race", withExtension: "mp4") {
+                VideoView(videoURL: url)
+            } else {
+                EmptyView()
+            }
+        }
+        .windowStyle(.automatic)
+        .defaultWindowPlacement { content, context in
+            guard let home = context.windows.first(where: { $0.id == "home" }) else { return WindowPlacement(nil)
+            }
+            return WindowPlacement(.replacing(home))
         }
         
+        WindowGroup(id: "race-track") {
+            RaceTrackView()
+        }
+        .windowStyle(.volumetric)
+        .defaultWindowPlacement { content, context in
+            guard let dashboard = context.windows.first(where: { $0.id == "race-video" }) else { return WindowPlacement(nil)
+            }
+            return WindowPlacement(.below(dashboard))
+        }
+        WindowGroup(id: "dashboard") {
+            LeaderboardView(eventDeployer: eventDeployer)
+        }
+        .defaultSize(width: 1100, height: 1500)
+        .defaultWindowPlacement { content, context in
+            guard let raceVideo = context.windows.first(where: { $0.id == "race-video" }) else {
+                return WindowPlacement(nil)
+            }
+            return WindowPlacement(.trailing(raceVideo))
+        }
     }
 }

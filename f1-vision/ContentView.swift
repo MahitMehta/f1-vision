@@ -28,7 +28,7 @@ struct ContentView: View {
                                     
                                     DispatchQueue.main.async {
                                         openWindow(id: "radio", value: RadioViewProps(
-                                            driver: "Driver: \(String(describing: radioDriverId))",
+                                            driver: "Driver: \(radioDriverId ?? -1)",
                                             audioURL: "https://livetiming.formula1.com/static/2024/2024-03-02_Bahrain_Grand_Prix/2024-03-02_Race/TeamRadio/\(radioMessageID).mp3")
                                         )
                                     }
@@ -42,9 +42,11 @@ struct ContentView: View {
                         await eventDeployer.run_loop()
                         
                         if value {
-                            openWindow(id: "dashboard")
+                            openWindow(id: "race-video")
                             openWindow(id: "race-track")
+
                         } else {
+                            dismissWindow(id: "race-video")
                             dismissWindow(id: "dashboard")
                             dismissWindow(id: "race-track")
                         }
