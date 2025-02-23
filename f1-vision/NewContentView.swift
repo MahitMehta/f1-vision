@@ -132,7 +132,7 @@ struct NewContentView: View {
                         if showRaceTrack {
                             openWindow(id: "race-video")
                         } else {
-                            openWindow(id: "race-video")
+                            dismissWindow(id: "race-video")
 
                         }
                     }

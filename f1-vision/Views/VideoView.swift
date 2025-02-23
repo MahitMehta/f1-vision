@@ -47,6 +47,7 @@ struct VideoView: View {
                     openWindow(id: "dashboard")
                     openWindow(id: "race-track")
                 }
+      
         }
     }
 }
