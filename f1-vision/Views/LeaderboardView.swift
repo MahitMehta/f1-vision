@@ -1,6 +1,6 @@
 import SwiftUI
 
-var selectedDriver: Driver?
+var selectedDriver: Int?
 
 struct LeaderboardView: View {
     @Environment(\.openWindow) private var openWindow
@@ -8,35 +8,51 @@ struct LeaderboardView: View {
     // Temporary track data
     
     var trackTime = "00:00:00.000"
-    var rainPercentage = 100
+    var rainPercentage = 0
     var windSpeed = 1.2
-    var trackTemp = 2
-    var airTemp = 2
+    var trackTemp = 26.5
+    var airTemp = 18.9
     
-    let leaderboard = [
-        ("VER", "Red Bull Racing Honda RBPT", "M", "enabled", 18, "0.000", "5:14.567", ["5:12.345", "5:30.456", "5:31.543"]),
-        ("PER", "Red Bull Racing Honda RBPT", "S", "pit", 5, "+5.123", "5:01.234", ["5:45.123", "5:50.456", "5:25.789"]),
-        ("HAM", "Mercedes", "H", "on", 24, "+12.345", "5:30.234", ["5:34.567", "5:45.123", "5:50.345"]),
-        ("ALO", "Aston Martin Aramco Mercedes", "M", "off", 12, "+15.678", "5:12.567", ["5:01.789", "5:10.123", "5:00.789"]),
-        ("LEC", "Ferrari", "I", "enabled", 27, "+20.234", "5:45.678", ["5:45.234", "5:50.345", "5:00.789"]),
-        ("NOR", "McLaren Mercedes", "W", "disabled", 9, "+25.789", "5:23.456", ["5:10.123", "5:12.567", "5:00.345"]),
-        ("SAI", "Ferrari", "S", "pit", 30, "+30.123", "5:50.123", ["5:32.987", "5:45.567", "5:00.789"]),
-        ("RUS", "Mercedes", "H", "on", 15, "+35.678", "5:45.234", ["5:50.678", "5:55.123", "5:00.567"]),
-        ("PIA", "McLaren Mercedes", "M", "off", 22, "+40.234", "5:01.567", ["5:12.345", "5:10.234", "5:00.789"]),
-        ("STR", "Aston Martin Aramco Mercedes", "W", "enabled", 3, "+45.123", "5:12.345", ["5:01.123", "5:12.567", "5:00.345"]),
-        ("GAS", "Alpine Renault", "I", "disabled", 6, "+50.567", "5:45.678", ["5:45.234", "5:10.123", "5:00.567"]),
-        ("OCO", "Alpine Renault", "S", "on", 11, "+55.234", "5:50.789", ["5:55.345", "5:45.123", "5:00.789"]),
-        ("ALB", "Williams Mercedes", "H", "pit", 25, "+60.345", "5:12.567", ["5:10.234", "5:12.345", "5:00.789"]),
-        ("TSU", "RB Honda RBPT", "M", "off", 8, "+65.678", "5:20.234", ["5:20.567", "5:12.567", "5:00.345"]),
-        ("BOT", "Kick Sauber Ferrari", "W", "enabled", 21, "+70.123", "5:10.123", ["5:00.789", "5:10.345", "5:00.789"]),
-        ("HUL", "Haas Ferrari", "S", "on", 13, "+75.678", "5:45.678", ["5:34.567", "5:12.789", "5:00.345"]),
-        ("RIC", "RB Honda RBPT", "H", "pit", 17, "+80.234", "5:45.234", ["5:45.123", "5:50.678", "5:00.789"]),
-        ("ZHO", "Kick Sauber Ferrari", "I", "disabled", 4, "+85.123", "5:50.123", ["5:50.789", "5:12.345", "5:00.567"]),
-        ("MAG", "Haas Ferrari", "M", "enabled", 19, "+90.678", "5:10.567", ["5:10.234", "5:10.678", "5:00.345"]),
-        ("LAW", "RB Honda RBPT", "W", "off", 2, "+95.345", "5:25.123", ["5:25.678", "5:10.123", "5:00.567"]),
-        ("SAR", "Williams Mercedes", "S", "on", 28, "+100.789", "5:45.789", ["5:34.123", "5:12.567", "5:00.789"])
-    ]
+    typealias LeaderboardEntry = (Int, String, String, String, String, Int, String, String, [String])
 
+    @State private var leaderboard: [LeaderboardEntry] = [
+        (1, "VER", "Red Bull Racing", "M", "disabled", 18, "0.000", "5:14.567", ["5:12.345", "5:30.456", "5:31.543"]),
+        (11, "PER", "Red Bull Racing", "S", "pit", 5, "+5.123", "5:01.234", ["5:45.123", "5:50.456", "5:25.789"]),
+        (44, "HAM", "Mercedes", "H", "on", 24, "+12.345", "5:30.234", ["5:34.567", "5:45.123", "5:50.345"]),
+        (14, "ALO", "Aston Martin", "M", "off", 12, "+15.678", "5:12.567", ["5:01.789", "5:10.123", "5:00.789"]),
+        (16, "LEC", "Ferrari", "I", "enabled", 27, "+20.234", "5:45.678", ["5:45.234", "5:50.345", "5:00.789"]),
+        (4, "NOR", "McLaren", "W", "disabled", 9, "+25.789", "5:23.456", ["5:10.123", "5:12.567", "5:00.345"]),
+        (55, "SAI", "Ferrari", "S", "pit", 30, "+30.123", "5:50.123", ["5:32.987", "5:45.567", "5:00.789"]),
+        (63, "RUS", "Mercedes", "H", "on", 15, "+35.678", "5:45.234", ["5:50.678", "5:55.123", "5:00.567"]),
+        (81, "PIA", "McLaren", "M", "off", 22, "+40.234", "5:01.567", ["5:12.345", "5:10.234", "5:00.789"]),
+        (18, "STR", "Aston Martin", "W", "enabled", 3, "+45.123", "5:12.345", ["5:01.123", "5:12.567", "5:00.345"]),
+        (10, "GAS", "Alpine", "I", "disabled", 6, "+50.567", "5:45.678", ["5:45.234", "5:10.123", "5:00.567"]),
+        (31, "OCO", "Alpine", "S", "on", 11, "+55.234", "5:50.789", ["5:55.345", "5:45.123", "5:00.789"]),
+        (23, "ALB", "Williams", "H", "pit", 25, "+60.345", "5:12.567", ["5:10.234", "5:12.345", "5:00.789"]),
+        (22, "TSU", "RB Honda RBPT", "M", "off", 8, "+65.678", "5:20.234", ["5:20.567", "5:12.567", "5:00.345"]),
+        (77, "BOT", "Kick Sauber", "W", "enabled", 21, "+70.123", "5:10.123", ["5:00.789", "5:10.345", "5:00.789"]),
+        (27, "HUL", "Haas Ferrari", "S", "on", 13, "+75.678", "5:45.678", ["5:34.567", "5:12.789", "5:00.345"]),
+        (23, "RIC", "RB", "H", "pit", 17, "+80.234", "5:45.234", ["5:45.123", "5:50.678", "5:00.789"]),
+        (24, "ZHO", "Kick Sauber", "I", "disabled", 4, "+85.123", "5:50.123", ["5:50.789", "5:12.345", "5:00.567"]),
+        (20, "MAG", "Haas", "M", "enabled", 19, "+90.678", "5:10.567", ["5:10.234", "5:10.678", "5:00.345"]),
+        (30, "LAW", "RB", "W", "off", 2, "+95.345", "5:25.123", ["5:25.678", "5:10.123", "5:00.567"]),
+        (2, "SAR", "Williams", "S", "on", 28, "+100.789", "5:45.789", ["5:34.123", "5:12.567", "5:00.789"])
+    ]
+    
+    func overtake(car1: Int, car2: Int) {
+        guard let index1 = leaderboard.firstIndex(where: { $0.0 == car1 }),
+              let index2 = leaderboard.firstIndex(where: { $0.0 == car2 }) else {
+            return
+        }
+        
+        withAnimation {
+            leaderboard.swapAt(index1, index2)
+        }
+    }
+    
+//    func refreshDriverData()
+//    
+//    func refreshOvertakeData()
 
     let teamHexcode: [String: String] = [
         "Red Bull Racing": "3671C6",
@@ -133,15 +149,10 @@ struct LeaderboardView: View {
             List(Array(leaderboard.enumerated()), id: \.element.0) { index, entry in
 
                 Button(action: {
-                    selectedDriver = Driver(
-                        name: entry.0,
-                        number: "\(index + 1)",
-                        nationality: "GB",
-                        position: index + 1,
-                        photo: entry.0.lowercased()
-                    )
+                    selectedDriver = entry.0
+                    overtake(car1: entry.0, car2: leaderboard[(index + 1) % leaderboard.count].0)
                     
-                    openWindow(id: "driver-details")
+//                    openWindow(id: "driver-details")
                 }) {
 
                     HStack {
@@ -158,12 +169,12 @@ struct LeaderboardView: View {
                         
                         ZStack {
                             Rectangle()
-                                .fill(Color(hex: teamHexcode[entry.1] ?? "000000"))
+                                .fill(Color(hex: teamHexcode[entry.2] ?? "000000"))
                                 .frame(width: 110, height: 60)
                                 .cornerRadius(10)
                                 .opacity(0.45)
                             
-                            Text(entry.0)
+                            Text(entry.1)
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .padding(.leading, 30)
@@ -173,28 +184,28 @@ struct LeaderboardView: View {
                         
                         let textWidth: CGFloat = 50
                         
-                        if (entry.3 == "enabled") {
+                        if (entry.4 == "enabled") {
                             Text("DRS")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(width: textWidth, alignment: .leading)
                                 .padding(.leading, 30)
                                 .foregroundColor(.white)
-                        } else if (entry.3 == "disabled") {
+                        } else if (entry.4 == "disabled") {
                             Text("DRS")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(width: textWidth, alignment: .leading)
                                 .padding(.leading, 30)
                                 .foregroundColor(Color(hex: "4D4D4D"))
-                        } else if (entry.3 == "on") {
+                        } else if (entry.4 == "on") {
                             Text("DRS")
                                 .font(.title)
                                 .fontWeight(.bold)
                                 .frame(width: textWidth, alignment: .leading)
                                 .padding(.leading, 30)
                                 .foregroundColor(Color(hex: "52E252"))
-                        } else if (entry.3 == "pit") {
+                        } else if (entry.4 == "pit") {
                             Text("PIT")
                                 .font(.title)
                                 .fontWeight(.bold)
@@ -212,7 +223,7 @@ struct LeaderboardView: View {
                         
                         // Tire type
                         
-                        Image(entry.2)
+                        Image(entry.3)
                             .resizable()
                             .scaledToFit()
                             .frame(width: 50, height: 50)
@@ -220,7 +231,7 @@ struct LeaderboardView: View {
                         
                         // Tire laps
                         
-                        Text("L\(entry.4)")
+                        Text("L\(entry.5)")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding(.leading, 20)
@@ -228,7 +239,7 @@ struct LeaderboardView: View {
                         
                         // Fastest Laps
                         
-                        Text("\(entry.5)")
+                        Text("\(entry.6)")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding(.leading, 5)
@@ -243,7 +254,7 @@ struct LeaderboardView: View {
                         
                         // Current Laps
                         
-                        Text("\(entry.6)")
+                        Text("\(entry.7)")
                             .font(.title)
                             .fontWeight(.bold)
                             .padding(.leading, 5)
@@ -252,19 +263,19 @@ struct LeaderboardView: View {
                         
                         // Sector Laps
                         
-                        Text("\(entry.7[0])")
+                        Text("\(entry.8[0])")
                             .font(.title)
                             .fontWeight(.bold)
                             .frame(width: 130, alignment: .leading)
                             .foregroundColor(Color(hex: "767676"))
                         
-                        Text("\(entry.7[1])")
+                        Text("\(entry.8[1])")
                             .font(.title)
                             .fontWeight(.bold)
                             .frame(width: 130, alignment: .leading)
                             .foregroundColor(Color(hex: "767676"))
                         
-                        Text("\(entry.7[2])")
+                        Text("\(entry.8[2])")
                             .font(.title)
                             .fontWeight(.bold)
                             .frame(width: 130, alignment: .leading)

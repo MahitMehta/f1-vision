@@ -1,0 +1,122 @@
+{
+    "81": {
+        "name": "Oscar PIASTRI",
+        "countrycode": "AUS",
+        "team": "McLaren",
+        "photo": "/O/OSCPIA01_Oscar_Piastri/oscpia"
+    },
+    "1": {
+        "name": "Max VERSTAPPEN",
+        "countrycode": "NED",
+        "team": "Red Bull Racing",
+        "photo": "/M/MAXVER01_Max_Verstappen/maxver"
+    },
+    "11": {
+        "name": "Sergio PEREZ",
+        "countrycode": "MEX",
+        "team": "Red Bull Racing",
+        "photo": "/S/SERPER01_Sergio_Perez/serper"
+    },
+    "16": {
+        "name": "Charles LECLERC",
+        "countrycode": "MON",
+        "team": "Ferrari",
+        "photo": "/C/CHALEC01_Charles_Leclerc/chalec"
+    },
+    "63": {
+        "name": "George RUSSELL",
+        "countrycode": "GBR",
+        "team": "Mercedes",
+        "photo": "/G/GEORUS01_George_Russell/georus"
+    },
+    "55": {
+        "name": "Carlos SAINZ",
+        "countrycode": "ESP",
+        "team": "Ferrari",
+        "photo": "/C/CARSAI01_Carlos_Sainz/carsai"
+    },
+    "14": {
+        "name": "Fernando ALONSO",
+        "countrycode": "ESP",
+        "team": "Aston Martin",
+        "photo": "/F/FERALO01_Fernando_Alonso/feralo"
+    },
+    "4": {
+        "name": "Lando NORRIS",
+        "countrycode": "GBR",
+        "team": "McLaren",
+        "photo": "/L/LANNOR01_Lando_Norris/lannor"
+    },
+    "44": {
+        "name": "Lewis HAMILTON",
+        "countrycode": "GBR",
+        "team": "Mercedes",
+        "photo": "/L/LEWHAM01_Lewis_Hamilton/lewham"
+    },
+    "27": {
+        "name": "Nico HULKENBERG",
+        "countrycode": "GER",
+        "team": "Haas F1 Team",
+        "photo": "/N/NICHUL01_Nico_Hulkenberg/nichul"
+    },
+    "22": {
+        "name": "Yuki TSUNODA",
+        "countrycode": "JPN",
+        "team": "RB",
+        "photo": "/Y/YUKTSU01_Yuki_Tsunoda/yuktsu"
+    },
+    "18": {
+        "name": "Lance STROLL",
+        "countrycode": "CAN",
+        "team": "Aston Martin",
+        "photo": "/L/LANSTR01_Lance_Stroll/lanstr"
+    },
+    "23": {
+        "name": "Alexander ALBON",
+        "countrycode": "THA",
+        "team": "Williams",
+        "photo": "/A/ALEALB01_Alexander_Albon/alealb"
+    },
+    "3": {
+        "name": "Daniel RICCIARDO",
+        "countrycode": "AUS",
+        "team": "RB",
+        "photo": "/D/DANRIC01_Daniel_Ricciardo/danric"
+    },
+    "20": {
+        "name": "Kevin MAGNUSSEN",
+        "countrycode": "DEN",
+        "team": "Haas F1 Team",
+        "photo": "/K/KEVMAG01_Kevin_Magnussen/kevmag"
+    },
+    "77": {
+        "name": "Valtteri BOTTAS",
+        "countrycode": "FIN",
+        "team": "Kick Sauber",
+        "photo": "/V/VALBOT01_Valtteri_Bottas/valbot"
+    },
+    "24": {
+        "name": "ZHOU Guanyu",
+        "countrycode": "CHN",
+        "team": "Kick Sauber",
+        "photo": "/G/GUAZHO01_Guanyu_Zhou/guazho"
+    },
+    "2": {
+        "name": "Logan SARGEANT",
+        "countrycode": "USA",
+        "team": "Williams",
+        "photo": "/L/LOGSAR01_Logan_Sargeant/logsar"
+    },
+    "31": {
+        "name": "Esteban OCON",
+        "countrycode": "FRA",
+        "team": "Alpine",
+        "photo": "/E/ESTOCO01_Esteban_Ocon/estoco"
+    },
+    "10": {
+        "name": "Pierre GASLY",
+        "countrycode": "FRA",
+        "team": "Alpine",
+        "photo": "/P/PIEGAS01_Pierre_Gasly/piegas"
+    }
+}

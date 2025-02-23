@@ -1,8 +1,20 @@
 import SwiftUI
 
 struct DriverDetailsView: View {
-    var driver: Driver
+    var driverId: Int
     var carStats: CarStatistics
+    
+    // Load your driver data as a dictionary instead of an array
+    let driverData: [Int: Driver] = loadJSON("driver_data") ?? [:] // Map of driverId to Driver
+
+    // Access the driver by driverId
+    let driver: Driver
+
+    init(driverId: Int, carStats: CarStatistics) {
+        self.driverId = driverId
+        self.carStats = carStats
+        self.driver = driverData[driverId] ?? Driver(name: "Unknown", countrycode: "", team: "", photo: "")
+    }
 
     var body: some View {
         ZStack {
@@ -12,13 +24,22 @@ struct DriverDetailsView: View {
             
             VStack(alignment: .leading, spacing: 20) {
                 HStack(alignment: .center, spacing: 16) {
+                    
                     // Driver Image
-                    Image(driver.photo)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 100, height: 100)
-                        .cornerRadius(10)
-                        .shadow(radius: 5)
+                    let photoURLString = "https://www.formula1.com/content/dam/fom-website/drivers\(driver.photo)01.png.transform/1col/image.png"
+                                        
+                    AsyncImage(url: URL(string: photoURLString)) { image in
+                        image
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 100, height: 100)
+                            .cornerRadius(10)
+                            .shadow(radius: 5)
+                        } placeholder: {
+                            ProgressView()
+                                .progressViewStyle(CircularProgressViewStyle(tint: .white))
+                                .frame(width: 100, height: 100)
+                        }
                     
                     VStack(alignment: .leading, spacing: 8) {
                         Text(driver.name)
@@ -26,12 +47,12 @@ struct DriverDetailsView: View {
                             .foregroundColor(.white)
                         
                         HStack {
-                            Text("Number: \(driver.number)")
+                            Text("Number: \(driverId)")
                                 .font(.system(size: 18, weight: .medium))
                                 .foregroundColor(.gray)
                             
                             // Display Nationality Flag
-                            Image(driver.nationality.lowercased())
+                            Image(driver.countrycode)
                                 .resizable()
                                 .scaledToFit()
                                 .frame(width: 30, height: 20)
@@ -41,7 +62,6 @@ struct DriverDetailsView: View {
                 }
                 .padding(.top, 20)
                 .padding(.horizontal)
-
 
                 // Speedometer
                 HStack {
@@ -167,11 +187,10 @@ struct ProgressBar: View {
     }
 }
 
-struct Driver {
+struct Driver: Decodable {
     var name: String
-    var number: String
-    var nationality: String
-    var position: Int
+    var countrycode: String
+    var team: String
     var photo: String
 }
 
@@ -185,6 +204,6 @@ struct CarStatistics {
 }
 
 #Preview() {
-    DriverDetailsView(driver: Driver(name: "Lewis Hamilton", number: "44", nationality: "GB", position: 1, photo: "lewis_hamilton"), carStats: CarStatistics(speed: 315, brake: 0, n_gear: 8, rpm: 11141, throttle: 99, drs: 12))
+    DriverDetailsView(driverId: 44, carStats: CarStatistics(speed: 315, brake: 0, n_gear: 8, rpm: 11141, throttle: 99, drs: 12))
         .frame(width: 400, height: 600)
 }

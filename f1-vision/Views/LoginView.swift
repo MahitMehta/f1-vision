@@ -24,12 +24,24 @@ struct LoginView: View {
                     .padding(.top, 1)
                     .padding(.leading, 40)
                 
+                Text("Email")
+                    .fontWeight(.bold)
+                    .foregroundColor(Color(hex: "D3D3D3"))
+                    .padding(.top, 10)
+                    .padding(.leading, 40)
+                
                 TextField("Email", text: $email)
                     .padding(.vertical, 15)
                     .background(Color.white)
                     .cornerRadius(10)
                     .padding(.horizontal, 40)
                     .keyboardType(.emailAddress)
+                
+                Text("Password")
+                    .fontWeight(.bold)
+                    .foregroundColor(Color(hex: "D3D3D3"))
+                    .padding(.top, 10)
+                    .padding(.leading, 40)
                                     
                 SecureField("Password", text: $password)
                     .padding(.vertical, 15)
@@ -65,7 +77,9 @@ struct LoginView: View {
 }
         
 
-#Preview(windowStyle: .automatic) {
+#Preview() {
     LoginView()
+    .frame(width: 500, height: 600)
 }
+
 
