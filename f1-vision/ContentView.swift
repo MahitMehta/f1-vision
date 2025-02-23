@@ -34,7 +34,7 @@ struct ContentView: View {
                                     }
                                 } else {
                                     DispatchQueue.main.async {
-                                        openWindow(id: "event-notif")
+                                        openWindow(id: "event-notif", value: NotificationViewProps(notificationMessage: event.message, displayDuration: 3.0))
                                     }
                                 }
                             }

@@ -59,9 +59,6 @@ struct f1_visionApp: App {
         WindowGroup {
             ContentView(eventDeployer: eventDeployer)
         }
-        WindowGroup(id: "event-notif") {
-            EventNotification()
-        }
         WindowGroup(id: "dashboard") {
             LeaderboardView(eventDeployer: eventDeployer)
         }
@@ -86,7 +83,7 @@ struct f1_visionApp: App {
         }
         .defaultSize(width: 400, height: 600)
         
-        WindowGroup(id: "notification", for: NotificationViewProps.self) { data in
+        WindowGroup(id: "event-notif", for: NotificationViewProps.self) { data in
             NotificationView(
                 contentProps: data.wrappedValue ?? nil
             )
