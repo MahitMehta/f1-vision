@@ -104,8 +104,8 @@ let teamHexcode: [String: String] = [
     "Aston Martin Aramco Mercedes": "#229971",
     "McLaren Mercedes": "#FF8000",
     "Haas Ferrari": "#B6BABD",
-    "RB Honda RBPT": "#6692FF",
-    "Williams Mercedes": "#64C4FF",
+    "RB Honda RBPT": "#FFFFFF",
+    "Williams Mercedes": "#FFFFFF",
     "Kick Sauber Ferrari": "#52E252",
     "Alpine Renault": "#FF87BC"
 ]
@@ -129,7 +129,7 @@ func loadCarModel(driverId: Int) async -> (Int, ModelEntity)? {
 }
 
 struct RaceTrackView: View {
-    let items: [DriverPosition] = loadJSON("driver_all") ?? []
+    let items: [DriverPosition] = loadJSON("bahrain_positions") ?? []
 
     var body: some View {
         var cars: [Int: ModelEntity] = [:]
@@ -146,7 +146,7 @@ struct RaceTrackView: View {
             
             // Load Cars
             
-            let carScaleFactor = 0.05;
+            let carScaleFactor = 0.075;
             
             let targetCarWidth = 2.0 * carScaleFactor
             let targetCarLength = 5.0 * carScaleFactor
@@ -250,8 +250,8 @@ struct RaceTrackView: View {
                                 prevZ: prevZ
                             )
                             
-                            let newX = -Double(pos[1] * 0.00071) + 2
-                            let newZ = -Double(pos[0] * 0.0012) + 3.6
+                            let newX = -Double(pos[1] * 0.00070) + 2.2
+                            let newZ = -Double(pos[0] * 0.00120) + 3.65
                             
                             let targetTransform = Transform(
                                 scale: car.transform.scale,
