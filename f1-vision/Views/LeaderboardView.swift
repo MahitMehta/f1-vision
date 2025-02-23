@@ -3,8 +3,10 @@ import SwiftUI
 var selectedDriver: Int?
 
 struct LeaderboardView: View {
+    var eventDeployer: EventDeployer
+    
     @Environment(\.openWindow) private var openWindow
-    var eventDeployer: EventDeployer = .init()
+    
     @State private var trackTime = "00:00:00.000"
     @State private var elapsedTime: Double = 0.0
     
@@ -345,5 +347,5 @@ struct Overtake: Decodable {
 
 #Preview(windowStyle: .automatic) {
 
-    LeaderboardView()
+    LeaderboardView(eventDeployer: EventDeployer.init())
 }
