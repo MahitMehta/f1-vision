@@ -8,8 +8,23 @@
 import SwiftUI
 
 struct EventNotification: View {
+    @Environment(\.dismissWindow) private var dismissWindow
+    
     var body: some View {
-        Text(/*@START_MENU_TOKEN@*/"Hello, World!"/*@END_MENU_TOKEN@*/)
+        Text("Event Notification")
+            .onAppear {
+                delayedDismiss()
+            }
+    }
+    
+    func delayedDismiss() {
+        Task {
+            try? await Task.sleep(nanoseconds: UInt64(3 * 1_000_000_000))
+            
+            DispatchQueue.main.async {
+                dismissWindow(id: "event-notif")
+            }
+        }
     }
 }
 

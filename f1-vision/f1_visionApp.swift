@@ -1,9 +1,66 @@
 import SwiftUI
 
+actor EventDeployer {
+    private var events: [Int : [() -> Void]]
+    private var handle: Task<(), Never>?
+    private var elapsedTime = 0.0;
+    
+    init() {
+        events = [:]
+    }
+    
+    func subscribe(key: Int, _ event: @escaping () -> Void) async {
+        print("Registering Event @ \(key)")
+        
+        if events[key] == nil {
+            events[key] = [event]
+        } else {
+            events[key]?.append(event)
+        }
+    }
+    
+    func getElapsedTime() -> Double {
+        return elapsedTime
+    }
+ 
+    func run_loop() {
+        elapsedTime = Date().timeIntervalSince1970
+        
+        let handle = Task {
+            // 1 second freq.
+            while true {
+                elapsedTime = Date().timeIntervalSince1970 - elapsedTime
+                
+                let intRepresentationOfTime = Int(elapsedTime);
+                
+                if let cbs = events[intRepresentationOfTime] {
+                    for cb in cbs {
+                        cb()
+                    }
+                }
+                
+                try? await Task.sleep(nanoseconds: UInt64(1 * 1_000_000_000))
+            }
+        }
+        self.handle = handle
+    }
+}
+
+struct RaceEvent : Codable {
+    let type: String
+    let time: Float
+    let message: String
+}
+
 @main
 struct f1_visionApp: App {
     var body: some Scene {
-        
+        WindowGroup {
+            ContentView()
+        }
+        WindowGroup(id: "event-notif") {
+            EventNotification()
+        }
         WindowGroup() {
             LeaderboardView()
         }

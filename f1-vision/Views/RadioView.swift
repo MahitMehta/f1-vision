@@ -133,13 +133,5 @@ struct RadioView: View {
         }
         
         dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
     }
 }

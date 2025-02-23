@@ -50,7 +50,7 @@ struct LeaderboardView: View {
         "Kick Sauber": "52E252",
         "Alpine": "FF87BC"
     ]
-        
+    
     var body: some View {
         VStack(alignment: .leading) {
             
