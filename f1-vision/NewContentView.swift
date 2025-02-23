@@ -19,6 +19,7 @@ struct NewContentView: View {
                     .font(.title)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
+                    .padding(.top, 10)
                     .padding(.leading, 40)
                 
                 Button(action: {
