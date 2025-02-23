@@ -1,6 +1,10 @@
 import SwiftUI
 
+var selectedDriver: Driver?
+
 struct LeaderboardView: View {
+    @Environment(\.openWindow) private var openWindow
+    
     // Temporary track data
     
     var trackTime = "00:00:00.000"
@@ -35,18 +39,18 @@ struct LeaderboardView: View {
 
 
     let teamHexcode: [String: String] = [
-        "Red Bull Racing Honda RBPT": "3671C6",
+        "Red Bull Racing": "3671C6",
         "Ferrari": "E8002D",
         "Mercedes": "27F4D2",
-        "Aston Martin Aramco Mercedes": "229971",
-        "McLaren Mercedes": "FF8000",
-        "Haas Ferrari": "B6BABD",
-        "RB Honda RBPT": "6692FF",
-        "Williams Mercedes": "64C4FF",
-        "Kick Sauber Ferrari": "52E252",
-        "Alpine Renault": "FF87BC"
+        "Aston Martin": "229971",
+        "McLaren": "FF8000",
+        "Haas F1 Team": "B6BABD",
+        "RB": "6692FF",
+        "Williams": "64C4FF",
+        "Kick Sauber": "52E252",
+        "Alpine": "FF87BC"
     ]
-    
+        
     var body: some View {
         VStack(alignment: .leading) {
             
@@ -127,145 +131,159 @@ struct LeaderboardView: View {
             // Leaderboard section
             
             List(Array(leaderboard.enumerated()), id: \.element.0) { index, entry in
-                HStack {
+
+                Button(action: {
+                    selectedDriver = Driver(
+                        name: entry.0,
+                        number: "\(index + 1)",
+                        nationality: "GB",
+                        position: index + 1,
+                        photo: entry.0.lowercased()
+                    )
                     
-                    // Position Number
-                    
-                    Text("\(index + 1)")
-                        .font(.largeTitle)
-                        .fontWeight(.bold)
-                        .padding(.trailing, 20)
-                        .frame(width: 60)
-                    
-                    // Driver Name
-                    
-                    ZStack {
-                        Rectangle()
-                            .fill(Color(hex: teamHexcode[entry.1] ?? "000000"))
-                            .frame(width: 110, height: 60)
-                            .cornerRadius(10)
-                            .opacity(0.45)
+                    openWindow(id: "driver-details")
+                }) {
+
+                    HStack {
                         
-                        Text(entry.0)
+                        // Position Number
+                        
+                        Text("\(index + 1)")
+                            .font(.largeTitle)
+                            .fontWeight(.bold)
+                            .padding(.trailing, 20)
+                            .frame(width: 60)
+                        
+                        // Driver Name
+                        
+                        ZStack {
+                            Rectangle()
+                                .fill(Color(hex: teamHexcode[entry.1] ?? "000000"))
+                                .frame(width: 110, height: 60)
+                                .cornerRadius(10)
+                                .opacity(0.45)
+                            
+                            Text(entry.0)
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .padding(.leading, 30)
+                        }
+                        
+                        // DRS / PIT
+                        
+                        let textWidth: CGFloat = 50
+                        
+                        if (entry.3 == "enabled") {
+                            Text("DRS")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(width: textWidth, alignment: .leading)
+                                .padding(.leading, 30)
+                                .foregroundColor(.white)
+                        } else if (entry.3 == "disabled") {
+                            Text("DRS")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(width: textWidth, alignment: .leading)
+                                .padding(.leading, 30)
+                                .foregroundColor(Color(hex: "4D4D4D"))
+                        } else if (entry.3 == "on") {
+                            Text("DRS")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(width: textWidth, alignment: .leading)
+                                .padding(.leading, 30)
+                                .foregroundColor(Color(hex: "52E252"))
+                        } else if (entry.3 == "pit") {
+                            Text("PIT")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(width: textWidth, alignment: .leading)
+                                .padding(.leading, 30)
+                                .foregroundColor(Color(hex: "64C4FF"))
+                        } else {
+                            Text("")
+                                .font(.title)
+                                .fontWeight(.bold)
+                                .frame(width: textWidth, alignment: .leading)
+                                .padding(.leading, 30)
+                                .foregroundColor(Color(hex: "64C4FF"))
+                        }
+                        
+                        // Tire type
+                        
+                        Image(entry.2)
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 50, height: 50)
+                            .padding(.leading, 20)
+                        
+                        // Tire laps
+                        
+                        Text("L\(entry.4)")
                             .font(.title)
                             .fontWeight(.bold)
-                            .padding(.leading, 30)
-                    }
-                    
-                    // DRS / PIT
-                    
-                    let textWidth: CGFloat = 50
-                    
-                    if (entry.3 == "enabled") {
-                        Text("DRS")
+                            .padding(.leading, 20)
+                            .frame(width: 100, alignment: .leading)
+                        
+                        // Fastest Laps
+                        
+                        Text("\(entry.5)")
                             .font(.title)
                             .fontWeight(.bold)
-                            .frame(width: textWidth, alignment: .leading)
-                            .padding(.leading, 30)
-                            .foregroundColor(.white)
-                    } else if (entry.3 == "disabled") {
-                        Text("DRS")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .frame(width: textWidth, alignment: .leading)
-                            .padding(.leading, 30)
-                            .foregroundColor(Color(hex: "4D4D4D"))
-                    } else if (entry.3 == "on") {
-                        Text("DRS")
-                            .font(.title)
-                            .fontWeight(.bold)
-                            .frame(width: textWidth, alignment: .leading)
-                            .padding(.leading, 30)
+                            .padding(.leading, 5)
+                            .frame(width: 120, alignment: .leading)
                             .foregroundColor(Color(hex: "52E252"))
-                    } else if (entry.3 == "pit") {
-                        Text("PIT")
+                        
+                        Rectangle()
+                            .fill(Color.gray)
+                            .frame(width: 2, height: 40)
+                            .padding(.leading, 10)
+                            .padding(.trailing, 10)
+                        
+                        // Current Laps
+                        
+                        Text("\(entry.6)")
                             .font(.title)
                             .fontWeight(.bold)
-                            .frame(width: textWidth, alignment: .leading)
-                            .padding(.leading, 30)
-                            .foregroundColor(Color(hex: "64C4FF"))
-                    } else {
-                        Text("")
+                            .padding(.leading, 5)
+                            .frame(width: 170, alignment: .leading)
+                            .foregroundColor(Color(hex: "FFFFFF"))
+                        
+                        // Sector Laps
+                        
+                        Text("\(entry.7[0])")
                             .font(.title)
                             .fontWeight(.bold)
-                            .frame(width: textWidth, alignment: .leading)
-                            .padding(.leading, 30)
-                            .foregroundColor(Color(hex: "64C4FF"))
+                            .frame(width: 130, alignment: .leading)
+                            .foregroundColor(Color(hex: "767676"))
+                        
+                        Text("\(entry.7[1])")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .frame(width: 130, alignment: .leading)
+                            .foregroundColor(Color(hex: "767676"))
+                        
+                        Text("\(entry.7[2])")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .frame(width: 130, alignment: .leading)
+                            .foregroundColor(Color(hex: "767676"))
+                        
                     }
-                    
-                    // Tire type
-                    
-                    Image(entry.2)
-                        .resizable()
-                        .scaledToFit()
-                        .frame(width: 50, height: 50)
-                        .padding(.leading, 20)
-                    
-                    // Tire laps
-                    
-                    Text("L\(entry.4)")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.leading, 20)
-                        .frame(width: 100, alignment: .leading)
-                    
-                    // Fastest Laps
-                    
-                    Text("\(entry.5)")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.leading, 5)
-                        .frame(width: 120, alignment: .leading)
-                        .foregroundColor(Color(hex: "52E252"))
-                    
-                    Rectangle()
-                        .fill(Color.gray)
-                        .frame(width: 2, height: 40)
-                        .padding(.leading, 10)
-                        .padding(.trailing, 10)
-                    
-                    // Current Laps
-                    
-                    Text("\(entry.6)")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .padding(.leading, 5)
-                        .frame(width: 170, alignment: .leading)
-                        .foregroundColor(Color(hex: "FFFFFF"))
-                    
-                    // Sector Laps
-                    
-                    Text("\(entry.7[0])")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .frame(width: 130, alignment: .leading)
-                        .foregroundColor(Color(hex: "767676"))
-                    
-                    Text("\(entry.7[1])")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .frame(width: 130, alignment: .leading)
-                        .foregroundColor(Color(hex: "767676"))
-                    
-                    Text("\(entry.7[2])")
-                        .font(.title)
-                        .fontWeight(.bold)
-                        .frame(width: 130, alignment: .leading)
-                        .foregroundColor(Color(hex: "767676"))
-                    
+                    .listRowBackground(Color(hex: "18191A"))
                 }
-                .listRowBackground(Color(hex: "18191A"))
+                .padding(.leading, 20)
             }
-            .padding(.leading, 20)
-            
         }
         .padding()
         .background(Color(hex: "18191A"))
         .cornerRadius(20)
         .edgesIgnoringSafeArea(.all)
+        }
     }
-}
 
 #Preview(windowStyle: .automatic) {
+
     LeaderboardView()
 }
