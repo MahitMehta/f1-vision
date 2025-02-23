@@ -1,10 +1,3 @@
-//
-//  ContentView.swift
-//  f1-vision
-//
-//  Created by Nivan Gujral on 2/21/25.
-//
-
 import SwiftUI
 import RealityKit
 import RealityKitContent

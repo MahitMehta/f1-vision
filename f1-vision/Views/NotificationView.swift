@@ -1,32 +1,35 @@
 import SwiftUI
 
-struct NotificationView: View {
-    var notificationMessage: String
-    var displayDuration: TimeInterval // Time in seconds
-    @State private var isVisible = true
+struct NotificationViewProps : Decodable, Encodable, Hashable {
+    let notificationMessage: String
+    let displayDuration: TimeInterval
+}
 
+struct NotificationView: View {
+    
+    @Environment(\.dismissWindow) var dismissWindow
+    var contentProps: NotificationViewProps?
+    
     var body: some View {
         ZStack {
-            if isVisible {
-                // Background parallelogram
-                Parallelogram()
-                    .fill(Color(hex: "111015"))
-                    .frame(height: 120)
-                    .shadow(radius: 5)
-
-                // Text overlay
-                Text(notificationMessage)
+            Parallelogram()
+                .fill(Color(hex: "111015"))
+                .frame(height: 120)
+                .shadow(radius: 5)
+            
+            if let contentProps = contentProps {
+                Text(contentProps.notificationMessage)
                     .foregroundColor(.white)
-                    .font(.title)
+                    .font(.title2)
                     .padding(.horizontal)
             }
+            
         }
         .padding()
         .onAppear {
-            DispatchQueue.main.asyncAfter(deadline: .now() + displayDuration) {
-                // Hide the notification after the specified duration
-                withAnimation {
-                    isVisible = false
+            if let contentProps = contentProps {
+                DispatchQueue.main.asyncAfter(deadline: .now() + contentProps.displayDuration) {
+                    dismissWindow(id: "notification")
                 }
             }
         }
@@ -44,8 +47,4 @@ struct Parallelogram: Shape {
             path.closeSubpath()
         }
     }
-}
-
-#Preview {
-    NotificationView(notificationMessage: "Fastest lap by VER with 1:30.456.", displayDuration: 3.0)
 }
