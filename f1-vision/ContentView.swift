@@ -34,7 +34,7 @@ struct ContentView: View {
                                     }
                                 } else {
                                     DispatchQueue.main.async {
-                                        openWindow(id: "event-notif")
+                                        openWindow(id: "event-notif", value: NotificationViewProps(notificationMessage: event.message, displayDuration: 3.0))
                                     }
                                 }
                             }
@@ -42,8 +42,10 @@ struct ContentView: View {
                         await eventDeployer.run_loop()
                         
                         if value {
+                            openWindow(id: "dashboard")
                             openWindow(id: "race-track")
                         } else {
+                            dismissWindow(id: "dashboard")
                             dismissWindow(id: "race-track")
                         }
                     }

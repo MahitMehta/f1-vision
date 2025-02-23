@@ -2,7 +2,15 @@ import SwiftUI
 
 var selectedDriver: Int?
 
+struct DriverLapsData : Codable, Identifiable {
+    let id: Int
+    let positions: [[Float]]
+}
+
 struct LeaderboardView: View {
+    let driversLapsData: [DriverLapsData] = loadJSON("bahrain_lap_data") ?? []
+    let overtakes: [Overtake] = loadJSON("overtake_data") ?? []
+    
     var eventDeployer: EventDeployer
     
     @Environment(\.openWindow) private var openWindow
@@ -30,27 +38,27 @@ struct LeaderboardView: View {
     typealias LeaderboardEntry = (Int, String, String, String, String, Int, String, String, [String])
     
     @State private var leaderboard: [LeaderboardEntry] = [
-        (1, "VER", "Red Bull Racing", "M", "disabled", 18, "0.000", "5:14.567", ["5:12.345", "5:30.456", "5:31.543"]),
-        (11, "PER", "Red Bull Racing", "S", "pit", 5, "+5.123", "5:01.234", ["5:45.123", "5:50.456", "5:25.789"]),
-        (44, "HAM", "Mercedes", "H", "on", 24, "+12.345", "5:30.234", ["5:34.567", "5:45.123", "5:50.345"]),
-        (14, "ALO", "Aston Martin", "M", "off", 12, "+15.678", "5:12.567", ["5:01.789", "5:10.123", "5:00.789"]),
-        (16, "LEC", "Ferrari", "I", "enabled", 27, "+20.234", "5:45.678", ["5:45.234", "5:50.345", "5:00.789"]),
-        (4, "NOR", "McLaren", "W", "disabled", 9, "+25.789", "5:23.456", ["5:10.123", "5:12.567", "5:00.345"]),
-        (55, "SAI", "Ferrari", "S", "pit", 30, "+30.123", "5:50.123", ["5:32.987", "5:45.567", "5:00.789"]),
-        (63, "RUS", "Mercedes", "H", "on", 15, "+35.678", "5:45.234", ["5:50.678", "5:55.123", "5:00.567"]),
-        (81, "PIA", "McLaren", "M", "off", 22, "+40.234", "5:01.567", ["5:12.345", "5:10.234", "5:00.789"]),
-        (18, "STR", "Aston Martin", "W", "enabled", 3, "+45.123", "5:12.345", ["5:01.123", "5:12.567", "5:00.345"]),
-        (10, "GAS", "Alpine", "I", "disabled", 6, "+50.567", "5:45.678", ["5:45.234", "5:10.123", "5:00.567"]),
-        (31, "OCO", "Alpine", "S", "on", 11, "+55.234", "5:50.789", ["5:55.345", "5:45.123", "5:00.789"]),
-        (23, "ALB", "Williams", "H", "pit", 25, "+60.345", "5:12.567", ["5:10.234", "5:12.345", "5:00.789"]),
-        (22, "TSU", "RB Honda RBPT", "M", "off", 8, "+65.678", "5:20.234", ["5:20.567", "5:12.567", "5:00.345"]),
-        (77, "BOT", "Kick Sauber", "W", "enabled", 21, "+70.123", "5:10.123", ["5:00.789", "5:10.345", "5:00.789"]),
-        (27, "HUL", "Haas Ferrari", "S", "on", 13, "+75.678", "5:45.678", ["5:34.567", "5:12.789", "5:00.345"]),
-        (23, "RIC", "RB", "H", "pit", 17, "+80.234", "5:45.234", ["5:45.123", "5:50.678", "5:00.789"]),
-        (24, "ZHO", "Kick Sauber", "I", "disabled", 4, "+85.123", "5:50.123", ["5:50.789", "5:12.345", "5:00.567"]),
-        (20, "MAG", "Haas", "M", "enabled", 19, "+90.678", "5:10.567", ["5:10.234", "5:10.678", "5:00.345"]),
-        (30, "LAW", "RB", "W", "off", 2, "+95.345", "5:25.123", ["5:25.678", "5:10.123", "5:00.567"]),
-        (2, "SAR", "Williams", "S", "on", 28, "+100.789", "5:45.789", ["5:34.123", "5:12.567", "5:00.789"])
+        (1, "VER", "Red Bull Racing", "M", "disabled", 18, "0.000", "00.000", ["00.000", "00.000", "00.000"]),
+        (11, "PER", "Red Bull Racing", "S", "pit", 5, "+5.123", "00.000", ["00.000", "00.000", "00.000"]),
+        (44, "HAM", "Mercedes", "H", "on", 24, "+12.345", "00.000", ["00.000", "00.000", "00.000"]),
+        (14, "ALO", "Aston Martin", "M", "off", 12, "+15.678", "00.000", ["00.000", "00.000", "00.000"]),
+        (16, "LEC", "Ferrari", "I", "enabled", 27, "+20.234", "00.000", ["00.000", "00.000", "00.000"]),
+        (4, "NOR", "McLaren", "W", "disabled", 9, "+25.789", "00.000", ["00.000", "00.000", "00.000"]),
+        (55, "SAI", "Ferrari", "S", "pit", 30, "+30.123", "00.000", ["00.000", "00.000", "00.000"]),
+        (63, "RUS", "Mercedes", "H", "on", 15, "+35.678", "00.000", ["00.000", "00.000", "00.000"]),
+        (81, "PIA", "McLaren", "M", "off", 22, "+40.234", "00.000", ["00.000", "00.000", "00.000"]),
+        (18, "STR", "Aston Martin", "W", "enabled", 3, "+45.123", "00.000", ["00.000", "00.000", "00.000"]),
+        (10, "GAS", "Alpine", "I", "disabled", 6, "+50.567", "00.000", ["00.000", "00.000", "00.000"]),
+        (31, "OCO", "Alpine", "S", "on", 11, "+55.234", "00.000", ["00.000", "00.000", "00.000"]),
+        (23, "ALB", "Williams", "H", "pit", 25, "+60.345", "00.000", ["00.000", "00.000", "00.000"]),
+        (22, "TSU", "RB Honda RBPT", "M", "off", 8, "+65.678", "00.000", ["00.000", "00.000", "00.000"]),
+        (77, "BOT", "Kick Sauber", "W", "enabled", 21, "+70.123", "00.000", ["00.000", "00.000", "00.000"]),
+        (27, "HUL", "Haas Ferrari", "S", "on", 13, "+75.678", "00.000", ["00.000", "00.000", "00.000"]),
+        (23, "RIC", "RB", "H", "pit", 17, "+80.234", "00.000", ["00.000", "00.000", "00.000"]),
+        (24, "ZHO", "Kick Sauber", "I", "disabled", 4, "+85.123", "00.000", ["00.000", "00.000", "00.000"]),
+        (20, "MAG", "Haas", "M", "enabled", 19, "+90.678", "00.000", ["00.000", "00.000", "00.000"]),
+        (30, "LAW", "RB", "W", "off", 2, "+95.345", "00.000", ["00.000", "00.000", "00.000"]),
+        (2, "SAR", "Williams", "S", "on", 28, "+100.789", "00.000", ["00.000", "00.000", "00.000"])
     ]
     
     func overtake(car1: Int, car2: Int) {
@@ -79,9 +87,7 @@ struct LeaderboardView: View {
     }
 
     func refreshOvertakeData() async {
-        let overtakes: [Overtake] = loadJSON("overtake_data") ?? []
         let elapsedTime = eventDeployer.getElapsedTime()
-            
             for index in lastOvertakeIndex..<overtakes.count {
                 let overtake = overtakes[index]
 
@@ -330,12 +336,61 @@ struct LeaderboardView: View {
         .onAppear {
             Task {
                 startOvertakeRefresh()
+                await loadLeaderBoardEvents()
             }
         }
         .padding()
         .background(Color(hex: "18191A"))
         .cornerRadius(20)
         .edgesIgnoringSafeArea(.all)
+    }
+    
+    func loadLeaderBoardEvents() async {
+        for driverLapData in driversLapsData {
+            for lap in driverLapData.positions {
+                let lapNumber = Float(lap[0])
+                let section1 = Float(lap[1])
+                let section2 = Float(lap[2])
+                let section3 = Float(lap[3])
+                let lapTime = Float(lap[4])
+                let totalTime = Float(lap[5])
+                
+        
+                // Section 1
+                let section1Delay = section1 + totalTime
+                await eventDeployer.subscribe(key: Int(section1Delay)) {
+                    DispatchQueue.main.async {
+                        guard let idx = leaderboard.firstIndex(where: { $0.0 == driverLapData.id }) else {
+                            return
+                        }
+                        leaderboard[idx].8[0] = "\(section1)"
+                    }
+                }
+                
+                // Section 2
+                let section2Delay = section1Delay + section2
+                await eventDeployer.subscribe(key: Int(section2Delay)) {
+                    DispatchQueue.main.async {
+                        guard let idx = leaderboard.firstIndex(where: { $0.0 == driverLapData.id }) else {
+                            return
+                        }
+                        leaderboard[idx].8[1] = "\(section2)"
+                    }
+                }
+                
+                // Section 3 + Record Lap
+                let section3Delay = section2Delay + section3
+                await eventDeployer.subscribe(key: Int(section3Delay)) {
+                    DispatchQueue.main.async {
+                        guard let idx = leaderboard.firstIndex(where: { $0.0 == driverLapData.id }) else {
+                            return
+                        }
+                        leaderboard[idx].8[2] = "\(section3)"
+                        leaderboard[idx].7 = "\(lapTime)"
+                    }
+                }
+            }
+        }
     }
 }
 
