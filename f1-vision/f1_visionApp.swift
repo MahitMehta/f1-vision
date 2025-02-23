@@ -56,20 +56,8 @@ struct f1_visionApp: App {
     var eventDeployer: EventDeployer = .init()
     
     var body: some Scene {
-        WindowGroup {
-            ContentView(eventDeployer: eventDeployer)
-                .frame(width: 600, height: 700)
-        }
-        WindowGroup(id: "dashboard") {
-            LeaderboardView(eventDeployer: eventDeployer)
-        }
-        WindowGroup(id: "race-track") {
-            RaceTrackView()
-        }.windowStyle(.volumetric)
-        
         WindowGroup(id: "home") {
             NewContentView(eventDeployer: eventDeployer)
-               // .frame(width: 600, height: 700)
         }
         // Radio Window
         WindowGroup(id: "radio", for: RadioViewProps.self) { data in
@@ -114,6 +102,18 @@ struct f1_visionApp: App {
                 return WindowPlacement(.leading(dashboard))
             }
             return WindowPlacement(.below(radio))
+        }
+        WindowGroup(id: "commentary-video", for: VideoViewProps.self) { data in
+            if let val = data.wrappedValue {
+                VideoView(videoURL: val.url)
+            } else {
+                EmptyView()
+            }
+        }
+        .defaultWindowPlacement { content, context in
+            guard let video = context.windows.first(where: { $0.id == "race-video" }) else { return WindowPlacement(nil)
+            }
+            return WindowPlacement(.above(video))
         }
         WindowGroup(id: "race-video") {
             if let url = Bundle.main.url(forResource: "race", withExtension: "mp4") {

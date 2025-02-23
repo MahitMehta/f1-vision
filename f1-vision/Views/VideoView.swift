@@ -5,7 +5,7 @@ import SwiftUI
 import AVKit
 
 struct VideoViewProps : Decodable, Encodable, Hashable {
-    let videoDestination: String
+    let url: URL
 }
 
 struct VideoPlayerView: View {

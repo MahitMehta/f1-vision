@@ -112,6 +112,20 @@ struct NewContentView: View {
                                 }
                             }
                         }
+                        
+                        for event_index in 0..<commentaryEvents.count {
+                            let eventWrapper = commentaryEvents[event_index]
+                            let timestamp = eventWrapper.event.timestamp
+                            
+                            if let url = Bundle.main.url(forResource: "\(event_index + 1)", withExtension: "mp4") {
+                                await eventDeployer.subscribe(key: Int(timestamp)) {
+                                    DispatchQueue.main.async {
+                                        openWindow(id: "commentary-video", value: VideoViewProps(url: url))
+                                    }
+                                }
+                            }
+                        }
+                        
                         await eventDeployer.run_loop()
                         
                         showRaceTrack.toggle()
