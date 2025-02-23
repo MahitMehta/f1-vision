@@ -1,9 +1,16 @@
 import SwiftUI
 import AVFoundation
 
+struct RadioViewProps : Decodable, Encodable, Hashable {
+    let driver: String
+    let audioURL: String?
+}
+
 struct RadioView: View {
-    var driver: String
-    var audioUrl: String? // The URL for remote radio audio.
+    let RADIO_DURATION_PADDING = 0.0
+    
+    var driverProps: RadioViewProps?
+    
     @State private var audioPlayer: AVAudioPlayer?
     @State private var radioPlayer: AVPlayer? // AVPlayer for streaming remote audio
     @State private var isLocalAudioFinished = false
@@ -17,7 +24,7 @@ struct RadioView: View {
             
             VStack(alignment: .trailing, spacing: 10) {
                 // Driver's Last Name
-                Text(driver.split(separator: " ").last?.uppercased() ?? "")
+                Text(driverProps?.driver.split(separator: " ").last?.uppercased() ?? "")
                     .font(.system(size: 32, weight: .bold))
                     .foregroundColor(Color(hex: "00A19B"))
                     .multilineTextAlignment(.trailing)
@@ -85,8 +92,8 @@ struct RadioView: View {
     
     // Play remote audio from the provided URL after local audio finishes
     public func playRemoteAudio() {
-        guard let remoteURL = URL(string: audioUrl ?? "") else {
-            print("Invalid audio URL: \(audioUrl ?? "nil")")
+        guard let remoteURL = URL(string: driverProps?.audioURL ?? "") else {
+            print("Invalid audio URL: \(driverProps?.audioURL ?? "nil")")
             return
         }
 
@@ -97,6 +104,19 @@ struct RadioView: View {
         // Start playing the remote radio stream
         radioPlayer?.play()
         print("Remote audio should now be playing.")
+        
+      
+       
+        Task {
+            if let duration = try? await radioPlayer?.currentItem?.asset.load(.duration) {
+                let seconds = CMTimeGetSeconds(duration)
+                try? await Task.sleep(nanoseconds: UInt64((seconds + RADIO_DURATION_PADDING) * 1_000_000_000))
+            }
+ 
+            DispatchQueue.main.async {
+                dismissWindow(id: "radio")
+            }
+        }
     }
 }
 

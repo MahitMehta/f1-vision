@@ -137,7 +137,10 @@ struct RaceTrackView: View {
         RealityView { content in
             // Load Track
             
-            let track = try! await ModelEntity(named: "track")
+            guard let track = try? await ModelEntity(named: "bahrain-track") else {
+                fatalError("Failed to load track")
+            }
+                    
             let bounds = track.visualBounds(relativeTo: nil)
             let maxDimension = max(bounds.extents.x, bounds.extents.y, bounds.extents.z)
             let scaleFactor = 0.5 / maxDimension

@@ -27,8 +27,22 @@ struct ContentView: View {
                     Task {
                         for event in raceEvents {
                             await eventDeployer.subscribe(key: Int(event.time)) {
-                                DispatchQueue.main.async {
-                                    openWindow(id: "event-notif")
+                                
+                                if event.type == "Radio" {
+                                    let radioMessageParts = event.message.split(separator: " ")
+                                    let radioDriverId = Int(radioMessageParts[1].replacingOccurrences(of: ":", with: ""))
+                                    let radioMessageID = radioMessageParts[2]
+                                    
+                                    DispatchQueue.main.async {
+                                        openWindow(id: "radio", value: RadioViewProps(
+                                            driver: "Driver: \(String(describing: radioDriverId))",
+                                            audioURL: "https://livetiming.formula1.com/static/2024/2024-03-02_Bahrain_Grand_Prix/2024-03-02_Race/TeamRadio/\(radioMessageID).mp3")
+                                        )
+                                    }
+                                } else {
+                                    DispatchQueue.main.async {
+                                        openWindow(id: "event-notif")
+                                    }
                                 }
                             }
                         }

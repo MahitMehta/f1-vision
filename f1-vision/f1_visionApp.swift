@@ -69,15 +69,14 @@ struct f1_visionApp: App {
         }.windowStyle(.volumetric)
         
         // Radio Window
-        WindowGroup(id: "radio") {
+        WindowGroup(id: "radio", for: RadioViewProps.self) { data in
             RadioView(
-                driver: "Lewis Hamilton",
-                audioUrl: "https://livetiming.formula1.com/static/2023/2023-09-17_Singapore_Grand_Prix/2023-09-15_Practice_1/TeamRadio/SERPER01_11_20230915_113201.mp3"
+                driverProps: data.wrappedValue ?? nil
             )
         }
         .defaultSize(width: 325, height: 250)
         .windowStyle(.plain)
-        
+        /*
         WindowGroup(id: "driver-details") {
             DriverDetailsView(
                 driver: selectedDriver ?? Driver(name: "Unknown", number: "0", nationality: "Unknown", position: 0, photo: "default"),
@@ -86,6 +85,6 @@ struct f1_visionApp: App {
         }
         .defaultSize(width: 400, height: 600)
         .windowStyle(.plain)
-       
+       */
     }
 }
