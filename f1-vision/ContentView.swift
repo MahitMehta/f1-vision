@@ -10,14 +10,14 @@ import RealityKit
 import RealityKitContent
 
 struct ContentView: View {
-
+    let eventDeployer: EventDeployer
+    
     @State private var showRaceTrack: Bool = false
     
     @Environment(\.openWindow) var openWindow
     @Environment(\.dismissWindow) var dismissWindow
     
     let raceEvents : [RaceEvent] = loadJSON("bahrain_events") ?? []
-    var eventDeployer: EventDeployer = .init()
     
     var body: some View {
         VStack {
@@ -61,6 +61,6 @@ struct ContentView: View {
 }
 
 #Preview(windowStyle: .automatic) {
-    ContentView()
+    ContentView(eventDeployer: EventDeployer.init())
         .environment(AppModel())
 }

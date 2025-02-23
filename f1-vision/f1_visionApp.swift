@@ -20,18 +20,18 @@ actor EventDeployer {
     }
     
     func getElapsedTime() -> Double {
-        return elapsedTime
+        return self.elapsedTime
     }
  
     func run_loop() {
-        elapsedTime = Date().timeIntervalSince1970
+        self.elapsedTime = Date().timeIntervalSince1970
         
         let handle = Task {
             // 1 second freq.
             while true {
-                elapsedTime = Date().timeIntervalSince1970 - elapsedTime
+                self.elapsedTime = Date().timeIntervalSince1970 - self.elapsedTime
                 
-                let intRepresentationOfTime = Int(elapsedTime);
+                let intRepresentationOfTime = Int(self.elapsedTime);
                 
                 if let cbs = events[intRepresentationOfTime] {
                     for cb in cbs {
@@ -54,15 +54,17 @@ struct RaceEvent : Codable {
 
 @main
 struct f1_visionApp: App {
+    var eventDeployer: EventDeployer = .init()
+    
     var body: some Scene {
         WindowGroup {
-            ContentView()
+            ContentView(eventDeployer: eventDeployer)
         }
         WindowGroup(id: "event-notif") {
             EventNotification()
         }
         WindowGroup() {
-            LeaderboardView()
+            LeaderboardView(eventDeployer: eventDeployer)
         }
         WindowGroup(id: "race-track") {
             RaceTrackView()
