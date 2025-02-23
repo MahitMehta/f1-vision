@@ -93,5 +93,11 @@ struct f1_visionApp: App {
             )
         }
         
+        WindowGroup(id: "video", for: VideoViewProps.self) { data in
+            VideoView(
+                videoContent: data.wrappedValue ?? nil
+            )
+        }
+        
     }
 }
