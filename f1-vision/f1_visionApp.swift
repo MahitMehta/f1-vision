@@ -58,6 +58,7 @@ struct f1_visionApp: App {
     var body: some Scene {
         WindowGroup {
             ContentView(eventDeployer: eventDeployer)
+                .frame(width: 600, height: 700)
         }
         WindowGroup(id: "dashboard") {
             LeaderboardView(eventDeployer: eventDeployer)

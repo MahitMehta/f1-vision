@@ -1,52 +1,136 @@
 import SwiftUI
+import RealityKit
+import RealityKitContent
 
 struct NewContentView: View {
+    let eventDeployer: EventDeployer
+    
+    @State private var showRaceTrack: Bool = false
+    
+    @Environment(\.openWindow) var openWindow
+    @Environment(\.dismissWindow) var dismissWindow
+    
+    let raceEvents: [RaceEvent] = loadJSON("bahrain_events") ?? []
     
     var body: some View {
         ZStack {
             Color(hex: "18191A")
                 .edgesIgnoringSafeArea(.all)
             
-            VStack(alignment: .leading) {
+            VStack {
                 Text("Welcome to F1 Vision!")
-                    .font(.largeTitle)
+                    .font(.extraLargeTitle2)
                     .fontWeight(.bold)
                     .foregroundColor(.white)
                     .padding(.top, 40)
-                    .padding(.leading, 40)
+                    .padding(.leading, 20)
                 
-                Text("Welcome to F1 Vision!")
-                    .font(.title)
-                    .fontWeight(.bold)
-                    .foregroundColor(.white)
-                    .padding(.top, 10)
-                    .padding(.leading, 40)
+                TabView {
+                    VStack {
+                        Text("2024 Gulf Air Bahrain Grand Prix")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.top, 10)
+                        
+                        Image("bahrain_map")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 400, height: 400)
+                            .padding(.leading, 20)
+                            .tag(0)
+                    }
+                    
+                    VStack {
+                        Text("2024 Italian Grand Prix")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.top, 10)
+                        
+                        Image("italian_map")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 400, height: 400)
+                            .padding(.leading, 20)
+                            .tag(1)
+                    }
+                    
+                    VStack {
+                        Text("2024 Singapore Grand Prix")
+                            .font(.title)
+                            .fontWeight(.bold)
+                            .foregroundColor(.white)
+                            .padding(.top, 10)
+                        
+                        Image("singapore_map")
+                            .resizable()
+                            .scaledToFit()
+                            .frame(width: 400, height: 400)
+                            .padding(.leading, 20)
+                            .tag(1)
+                    }
+                }
+                .frame(width: 400, height: 500)
+                .tabViewStyle(PageTabViewStyle(indexDisplayMode: .never))
+                .padding(.leading, 20)
+                
+                Spacer()
                 
                 Button(action: {
-                    
+                    Task {
+                        for event in raceEvents {
+                            await eventDeployer.subscribe(key: Int(event.time)) {
+                                if event.type == "Radio" {
+                                    let radioMessageParts = event.message.split(separator: " ")
+                                    let radioDriverId = Int(radioMessageParts[1].replacingOccurrences(of: ":", with: ""))
+                                    let radioMessageID = radioMessageParts[2]
+                                    
+                                    DispatchQueue.main.async {
+                                        openWindow(id: "radio", value: RadioViewProps(
+                                            driver: "Driver: \(String(describing: radioDriverId))",
+                                            audioURL: "https://livetiming.formula1.com/static/2024/2024-03-02_Bahrain_Grand_Prix/2024-03-02_Race/TeamRadio/\(radioMessageID).mp3")
+                                        )
+                                    }
+                                } else {
+                                    DispatchQueue.main.async {
+                                        openWindow(id: "event-notif", value: NotificationViewProps(notificationMessage: event.message, displayDuration: 3.0))
+                                    }
+                                }
+                            }
+                        }
+                        await eventDeployer.run_loop()
+                        
+                        showRaceTrack.toggle()
+                        if showRaceTrack {
+                            openWindow(id: "dashboard")
+                            openWindow(id: "race-track")
+                        } else {
+                            dismissWindow(id: "dashboard")
+                            dismissWindow(id: "race-track")
+                        }
+                    }
                 }) {
                     HStack {
-                        Text("Watch Race")
+                        Text("Immerse")
                             .font(.headline)
                             .padding(.vertical, 10)
                     }
                     .cornerRadius(10)
-                    .padding(.vertical, 5)
                 }
+                .frame(maxWidth: .infinity)
                 .padding(.leading, 40)
-                .padding(.top, 10)
+                .padding(.bottom, 30)
                 
                 Spacer()
             }
-            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .topLeading)
+            .frame(maxWidth: .infinity, maxHeight: .infinity, alignment: .center)
         }
         .cornerRadius(20)
     }
 }
-        
 
 #Preview() {
-    NewContentView()
+    NewContentView(eventDeployer: EventDeployer())
+        .frame(width: 600, height: 700)
 }
-
-
