@@ -4,17 +4,29 @@ var selectedDriver: Int?
 
 struct LeaderboardView: View {
     @Environment(\.openWindow) private var openWindow
+    var eventDeployer: EventDeployer = .init()
+    @State private var trackTime = "00:00:00.000"
+    @State private var elapsedTime: Double = 0.0
+    
     
     // Temporary track data
     
-    var trackTime = "00:00:00.000"
     var rainPercentage = 0
     var windSpeed = 1.2
     var trackTemp = 26.5
     var airTemp = 18.9
     
+    func formatElapsedTime(elapsedTime: Double) -> String {
+            let hours = Int(elapsedTime) / 3600
+            let minutes = (Int(elapsedTime) % 3600) / 60
+            let seconds = Int(elapsedTime) % 60
+            let milliseconds = Int((elapsedTime - Double(Int(elapsedTime))) * 1000)
+            
+            return String(format: "%02d:%02d:%02d.%03d", hours, minutes, seconds, milliseconds)
+        }
+    
     typealias LeaderboardEntry = (Int, String, String, String, String, Int, String, String, [String])
-
+    
     @State private var leaderboard: [LeaderboardEntry] = [
         (1, "VER", "Red Bull Racing", "M", "disabled", 18, "0.000", "5:14.567", ["5:12.345", "5:30.456", "5:31.543"]),
         (11, "PER", "Red Bull Racing", "S", "pit", 5, "+5.123", "5:01.234", ["5:45.123", "5:50.456", "5:25.789"]),
@@ -50,10 +62,38 @@ struct LeaderboardView: View {
         }
     }
     
-//    func refreshDriverData()
-//    
-//    func refreshOvertakeData()
+    @State private var lastOvertakeIndex = 0
+    
+    func startOvertakeRefresh() {
+        Task {
+            while true {
+                self.elapsedTime = self.eventDeployer.getElapsedTime()
+                self.trackTime = self.formatElapsedTime(elapsedTime: self.elapsedTime)
+                await refreshOvertakeData()
+                
+                try? await Task.sleep(nanoseconds: 1_000_000_000)
+            }
+        }
+    }
 
+    func refreshOvertakeData() async {
+        let overtakes: [Overtake] = loadJSON("overtake_data") ?? []
+        let elapsedTime = eventDeployer.getElapsedTime()
+            
+            for index in lastOvertakeIndex..<overtakes.count {
+                let overtake = overtakes[index]
+
+                if let overtakerID = Int(overtake.overtaker), let overtakenID = Int(overtake.overtaken) {
+                    self.overtake(car1: overtakerID, car2: overtakenID)
+                    lastOvertakeIndex = index + 1
+                } else {
+                    break
+                }
+            }
+        }
+    
+    //    func refreshDriverData()
+    
     let teamHexcode: [String: String] = [
         "Red Bull Racing": "3671C6",
         "Ferrari": "E8002D",
@@ -147,14 +187,12 @@ struct LeaderboardView: View {
             // Leaderboard section
             
             List(Array(leaderboard.enumerated()), id: \.element.0) { index, entry in
-
+                
                 Button(action: {
                     selectedDriver = entry.0
-                    overtake(car1: entry.0, car2: leaderboard[(index + 1) % leaderboard.count].0)
-                    
-//                    openWindow(id: "driver-details")
+                    openWindow(id: "driver-details")
                 }) {
-
+                    
                     HStack {
                         
                         // Position Number
@@ -287,12 +325,23 @@ struct LeaderboardView: View {
                 .padding(.leading, 20)
             }
         }
+        .onAppear {
+            Task {
+                startOvertakeRefresh()
+            }
+        }
         .padding()
         .background(Color(hex: "18191A"))
         .cornerRadius(20)
         .edgesIgnoringSafeArea(.all)
-        }
     }
+}
+
+struct Overtake: Decodable {
+    let time: Double
+    let overtaken: String
+    let overtaker: String
+}
 
 #Preview(windowStyle: .automatic) {
 

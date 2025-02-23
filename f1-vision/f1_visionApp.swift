@@ -76,15 +76,13 @@ struct f1_visionApp: App {
         }
         .defaultSize(width: 325, height: 250)
         .windowStyle(.plain)
-        /*
+        
         WindowGroup(id: "driver-details") {
             DriverDetailsView(
-                driver: selectedDriver ?? Driver(name: "Unknown", number: "0", nationality: "Unknown", position: 0, photo: "default"),
-                    carStats: CarStatistics(speed: 315, brake: 0, n_gear: 8, rpm: 11141, throttle: 99, drs: 12)
+                driverId: selectedDriver ?? 1,
+                carStats: CarStatistics(speed: 315, brake: 0, n_gear: 8, rpm: 11141, throttle: 99, drs: 12)
             )
         }
         .defaultSize(width: 400, height: 600)
-        .windowStyle(.plain)
-       */
     }
 }
