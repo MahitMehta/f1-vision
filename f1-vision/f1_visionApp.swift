@@ -3,15 +3,14 @@ import SwiftUI
 actor EventDeployer {
     private var events: [Int : [() -> Void]]
     private var handle: Task<(), Never>?
-    private var elapsedTime = 0.0;
+    private var loopStartTime = 0.0;
+    private var elapsedTime: Double = 0.0
     
     init() {
         events = [:]
     }
     
-    func subscribe(key: Int, _ event: @escaping () -> Void) async {
-        print("Registering Event @ \(key)")
-        
+    func subscribe(key: Int, _ event: @escaping () -> Void) async {        
         if events[key] == nil {
             events[key] = [event]
         } else {
@@ -24,13 +23,13 @@ actor EventDeployer {
     }
  
     func run_loop() {
-        self.elapsedTime = Date().timeIntervalSince1970
+        self.loopStartTime = Date().timeIntervalSince1970
         
         let handle = Task {
             // 1 second freq.
             while true {
-                self.elapsedTime = Date().timeIntervalSince1970 - self.elapsedTime
-                
+                self.elapsedTime = Date().timeIntervalSince1970 - self.loopStartTime
+
                 let intRepresentationOfTime = Int(self.elapsedTime);
                 
                 if let cbs = events[intRepresentationOfTime] {
@@ -63,7 +62,7 @@ struct f1_visionApp: App {
         WindowGroup(id: "event-notif") {
             EventNotification()
         }
-        WindowGroup() {
+        WindowGroup(id: "dashboard") {
             LeaderboardView(eventDeployer: eventDeployer)
         }
         WindowGroup(id: "race-track") {

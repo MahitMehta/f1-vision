@@ -49,8 +49,10 @@ struct ContentView: View {
                         await eventDeployer.run_loop()
                         
                         if value {
+                            openWindow(id: "dashboard")
                             openWindow(id: "race-track")
                         } else {
+                            dismissWindow(id: "dashboard")
                             dismissWindow(id: "race-track")
                         }
                     }
