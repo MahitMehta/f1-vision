@@ -3,8 +3,10 @@ import AVFoundation
 
 struct RadioView: View {
     var driver: String
-    var audioUrl: String
+    var audioUrl: String? // The URL for remote radio audio.
     @State private var audioPlayer: AVAudioPlayer?
+    @State private var radioPlayer: AVPlayer? // AVPlayer for streaming remote audio
+    @State private var isLocalAudioFinished = false
     @Environment(\.dismissWindow) private var dismissWindow // Access to dismiss window action
 
     var body: some View {
@@ -36,7 +38,6 @@ struct RadioView: View {
                     .padding(.horizontal)
                 
                 Spacer()
-                
             }
             .padding()
             .background(Color(.systemGray6))
@@ -45,101 +46,57 @@ struct RadioView: View {
             .frame(maxWidth: .infinity, maxHeight: .infinity)
         }
         .onAppear {
-            setupAudioSession() // Set up audio session
-            playAudio() // Play the audio when the view appears
+            playLocalAudio()
+        }
+    }
+
+    // Play local radio.mp3 from the app bundle
+    private func playLocalAudio() {
+        if let filePath = Bundle.main.path(forResource: "radio", ofType: "mp3"), let url = URL(string: filePath) {
+            do {
+                // Initialize the AVAudioPlayer with the local file
+                audioPlayer = try AVAudioPlayer(contentsOf: url)
+                audioPlayer?.prepareToPlay() // Prepare the audio player for playback
+                audioPlayer?.play() // Play the audio
+                print("Local audio is playing.")
+                
+                // Set up a Timer to check if the local audio finished playing
+                startTimer()
+            } catch {
+                print("Error playing local audio: \(error.localizedDescription)")
+            }
+        } else {
+            print("radio.mp3 not found in bundle.")
         }
     }
     
-    private func setupAudioSession() {
-        let session = AVAudioSession.sharedInstance()
-        do {
-            try session.setCategory(.playback, mode: .default)
-            try session.setActive(true)
-            print("Audio session set up successfully.")
-        } catch {
-            print("Failed to set up audio session: \(error.localizedDescription)")
-        }
-    }
-
-    private func playAudio() {
-        guard let remoteURL = URL(string: audioUrl) else {
-            print("Invalid audio URL")
-            return
-        }
-
-        // Download the audio file locally
-        let task = URLSession.shared.downloadTask(with: remoteURL) { localURL, response, error in
-            if let error = error {
-                print("Error downloading audio: \(error.localizedDescription)")
-                return
-            }
-
-            guard let localURL = localURL else {
-                print("No local URL for downloaded audio")
-                return
-            }
-
-            // Check if the file exists and can be played
-            do {
-                print("Audio file downloaded to: \(localURL)")
-
-                // Play the audio from the local URL
-                audioPlayer = try AVAudioPlayer(contentsOf: localURL)
-                audioPlayer?.prepareToPlay()
-                
-                // Debug: Ensure the player is ready
-                if let player = audioPlayer, player.prepareToPlay() {
-                    print("Audio player prepared.")
-                } else {
-                    print("Audio player not prepared correctly.")
+    // Timer to check if local audio has finished
+    private func startTimer() {
+        Timer.scheduledTimer(withTimeInterval: 0.5, repeats: true) { _ in
+            if let player = self.audioPlayer {
+                if player.currentTime >= player.duration - 0.1 {
+                    print("Local audio finished.")
+                    self.isLocalAudioFinished = true
+                    self.playRemoteAudio()
                 }
-
-                audioPlayer?.play()
-
-                // Start checking progress with a while loop
-                checkAudioProgress()
-
-                print("Audio is playing.")
-            } catch {
-                print("Error playing audio: \(error.localizedDescription)")
             }
         }
-
-        task.resume() // Start the download task
     }
-
-    private func checkAudioProgress() {
-        guard let player = audioPlayer else {
-            print("Audio player is not set up.")
+    
+    // Play remote audio from the provided URL after local audio finishes
+    public func playRemoteAudio() {
+        guard let remoteURL = URL(string: audioUrl ?? "") else {
+            print("Invalid audio URL: \(audioUrl ?? "nil")")
             return
         }
 
-        // Debug: Print initial state of audio player
-        print("Audio duration: \(player.duration) seconds")
-        print("Audio player is playing: \(player.isPlaying)")
-
-        // Block the thread to check audio progress in a while loop
-        while player.currentTime < player.duration {
-            // Print the current time for debugging purposes
-            print("Current time: \(player.currentTime) seconds")
-
-            // Sleep to prevent locking the UI thread
-            usleep(100000) // sleep for 0.1 seconds (100,000 microseconds)
-
-            if player.currentTime >= player.duration - 0.1 { // A small margin to handle floating point precision
-                print("Audio finished playing, dismissing window.")
-                break
-            }
-        }
+        // Create AVPlayer for streaming
+        print("Starting to stream remote audio from URL: \(remoteURL.absoluteString)")
+        radioPlayer = AVPlayer(url: remoteURL)
         
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
-        dismissWindow(id: "radio")
+        // Start playing the remote radio stream
+        radioPlayer?.play()
+        print("Remote audio should now be playing.")
     }
 }
+
