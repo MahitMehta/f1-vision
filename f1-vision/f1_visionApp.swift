@@ -7,6 +7,9 @@ struct f1_visionApp: App {
         WindowGroup() {
             LeaderboardView()
         }
+        WindowGroup(id: "race-track") {
+            RaceTrackView()
+        }.windowStyle(.volumetric)
         
         // Radio Window
         WindowGroup(id: "radio") {
